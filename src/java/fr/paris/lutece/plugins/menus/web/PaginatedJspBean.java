@@ -49,119 +49,113 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * PaginatedJspBean abstract class for JSP Bean
  */
-public abstract class PaginatedJspBean < S, T > extends MVCAdminJspBean
+public abstract class PaginatedJspBean<S, T> extends MVCAdminJspBean
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// Properties
-	protected final String PROPERTY_SUFFIX_DEFAULT_LIST_ITEM_PER_PAGE = ".listItems.itemsPerPage";
+    // Properties
+    protected final String PROPERTY_SUFFIX_DEFAULT_LIST_ITEM_PER_PAGE = ".listItems.itemsPerPage";
 
-	// Parameters
-	protected static final String PARAMETER_PAGE_INDEX = "page_index";
+    // Parameters
+    protected static final String PARAMETER_PAGE_INDEX = "page_index";
 
-	// Markers
-	protected static final String MARK_PAGINATOR = "paginator";
-	protected static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
+    // Markers
+    protected static final String MARK_PAGINATOR = "paginator";
+    protected static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
 
-	// Variables
-	protected String _strCurrentPageIndexForCustomMenu;
-	protected int _nItemsPerPageForCustomMenu;
-	protected String _strCurrentPageIndexForCustomMenuItem;
-	protected int _nItemsPerPageForCustomMenuItem;
+    // Variables
+    protected String _strCurrentPageIndexForCustomMenu;
+    protected int _nItemsPerPageForCustomMenu;
+    protected String _strCurrentPageIndexForCustomMenuItem;
+    protected int _nItemsPerPageForCustomMenuItem;
 
-	/**
-	 * Return a model that contains the list and paginator infos
-	 * 
-	 * @param request
-	 *                     The HTTP request
-	 * @param strBookmark
-	 *                     The bookmark
-	 * @param list
-	 *                     The list of item
-	 * @param strManageJsp
-	 *                     The JSP
-	 * @return The model
-	 */
-	protected Map < String, Object > getPaginatedListModelForCustomMenu( HttpServletRequest request, String strBookmark,
-			List < S > list, String strManageJsp )
-	{
+    /**
+     * Return a model that contains the list and paginator infos
+     * 
+     * @param request
+     *            The HTTP request
+     * @param strBookmark
+     *            The bookmark
+     * @param list
+     *            The list of item
+     * @param strManageJsp
+     *            The JSP
+     * @return The model
+     */
+    protected Map<String, Object> getPaginatedListModelForCustomMenu( HttpServletRequest request, String strBookmark, List<S> list, String strManageJsp )
+    {
 
-		final int nDefaultItemsPerPage = AppPropertiesService
-				.getPropertyInt( MenusPlugin.PLUGIN_NAME + PROPERTY_SUFFIX_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
+        final int nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( MenusPlugin.PLUGIN_NAME + PROPERTY_SUFFIX_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
 
-		_strCurrentPageIndexForCustomMenu = AbstractPaginator.getPageIndex( request,
-				AbstractPaginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndexForCustomMenu );
-		_nItemsPerPageForCustomMenu = AbstractPaginator.getItemsPerPage( request,
-				AbstractPaginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPageForCustomMenu, nDefaultItemsPerPage );
+        _strCurrentPageIndexForCustomMenu = AbstractPaginator.getPageIndex( request, AbstractPaginator.PARAMETER_PAGE_INDEX,
+                _strCurrentPageIndexForCustomMenu );
+        _nItemsPerPageForCustomMenu = AbstractPaginator.getItemsPerPage( request, AbstractPaginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPageForCustomMenu,
+                nDefaultItemsPerPage );
 
-		final UrlItem url = new UrlItem( strManageJsp );
-		final String strUrl = url.getUrl( );
+        final UrlItem url = new UrlItem( strManageJsp );
+        final String strUrl = url.getUrl( );
 
-		// PAGINATOR
-		final LocalizedPaginator < S > paginator = new LocalizedPaginator <>( list, _nItemsPerPageForCustomMenu, strUrl,
-				PARAMETER_PAGE_INDEX, _strCurrentPageIndexForCustomMenu,
-				getLocale( ) );
+        // PAGINATOR
+        final LocalizedPaginator<S> paginator = new LocalizedPaginator<>( list, _nItemsPerPageForCustomMenu, strUrl, PARAMETER_PAGE_INDEX,
+                _strCurrentPageIndexForCustomMenu, getLocale( ) );
 
-		final Map < String, Object > model = getModel( );
+        final Map<String, Object> model = getModel( );
 
-		model.put( MARK_NB_ITEMS_PER_PAGE, String.valueOf( _nItemsPerPageForCustomMenu ) );
-		model.put( MARK_PAGINATOR, paginator );
+        model.put( MARK_NB_ITEMS_PER_PAGE, String.valueOf( _nItemsPerPageForCustomMenu ) );
+        model.put( MARK_PAGINATOR, paginator );
 
-		model.put( strBookmark, getItemsFromIds( paginator.getPageItems( ) ) );
+        model.put( strBookmark, getItemsFromIds( paginator.getPageItems( ) ) );
 
-		return model;
-	}
+        return model;
+    }
 
-	/**
-	 * Return a model that contains the list and paginator infos
-	 * 
-	 * @param request
-	 *                     The HTTP request
-	 * @param strBookmark
-	 *                     The bookmark
-	 * @param list
-	 *                     The list of item
-	 * @param strManageJsp
-	 *                     The JSP
-	 * @return The model
-	 */
-	protected Map < String, Object > getPaginatedListModelForCustomMenuItem( HttpServletRequest request,
-			String strBookmark, List < CustomMenuItem > list, String strManageJsp )
-	{
+    /**
+     * Return a model that contains the list and paginator infos
+     * 
+     * @param request
+     *            The HTTP request
+     * @param strBookmark
+     *            The bookmark
+     * @param list
+     *            The list of item
+     * @param strManageJsp
+     *            The JSP
+     * @return The model
+     */
+    protected Map<String, Object> getPaginatedListModelForCustomMenuItem( HttpServletRequest request, String strBookmark, List<CustomMenuItem> list,
+            String strManageJsp )
+    {
 
-		final int nDefaultItemsPerPage = AppPropertiesService
-				.getPropertyInt( MenusPlugin.PLUGIN_NAME + PROPERTY_SUFFIX_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
+        final int nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( MenusPlugin.PLUGIN_NAME + PROPERTY_SUFFIX_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
 
-		_strCurrentPageIndexForCustomMenuItem = AbstractPaginator.getPageIndex( request,
-				AbstractPaginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndexForCustomMenuItem );
-		_nItemsPerPageForCustomMenuItem = AbstractPaginator.getItemsPerPage( request,
-				AbstractPaginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPageForCustomMenuItem, nDefaultItemsPerPage );
+        _strCurrentPageIndexForCustomMenuItem = AbstractPaginator.getPageIndex( request, AbstractPaginator.PARAMETER_PAGE_INDEX,
+                _strCurrentPageIndexForCustomMenuItem );
+        _nItemsPerPageForCustomMenuItem = AbstractPaginator.getItemsPerPage( request, AbstractPaginator.PARAMETER_ITEMS_PER_PAGE,
+                _nItemsPerPageForCustomMenuItem, nDefaultItemsPerPage );
 
-		final UrlItem url = new UrlItem( strManageJsp );
-		final String strUrl = url.getUrl( );
+        final UrlItem url = new UrlItem( strManageJsp );
+        final String strUrl = url.getUrl( );
 
-		// PAGINATOR
-		final LocalizedPaginator < CustomMenuItem > paginator = new LocalizedPaginator <>( list, _nItemsPerPageForCustomMenuItem,
-				strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndexForCustomMenuItem,
-				getLocale( ) );
+        // PAGINATOR
+        final LocalizedPaginator<CustomMenuItem> paginator = new LocalizedPaginator<>( list, _nItemsPerPageForCustomMenuItem, strUrl, PARAMETER_PAGE_INDEX,
+                _strCurrentPageIndexForCustomMenuItem, getLocale( ) );
 
-		final Map < String, Object > model = getModel( );
+        final Map<String, Object> model = getModel( );
 
-		model.put( MARK_NB_ITEMS_PER_PAGE, String.valueOf( _nItemsPerPageForCustomMenuItem ) );
-		model.put( MARK_PAGINATOR, paginator );
+        model.put( MARK_NB_ITEMS_PER_PAGE, String.valueOf( _nItemsPerPageForCustomMenuItem ) );
+        model.put( MARK_PAGINATOR, paginator );
 
-		model.put( strBookmark, paginator.getPageItems( ) );
+        model.put( strBookmark, paginator.getPageItems( ) );
 
-		return model;
-	}
+        return model;
+    }
 
-	/**
-	 * Get Items from Ids list
-	 *
-	 * @param listIds
-	 * @return the populated list of items corresponding to the id List
-	 */
-	abstract List < T > getItemsFromIds( List < S > listIds );
-	
-	
+    /**
+     * Get Items from Ids list
+     *
+     * @param listIds
+     * @return the populated list of items corresponding to the id List
+     */
+    abstract List<T> getItemsFromIds( List<S> listIds );
+
 }

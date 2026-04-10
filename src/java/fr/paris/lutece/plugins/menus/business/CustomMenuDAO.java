@@ -47,280 +47,280 @@ import org.apache.commons.lang3.StringUtils;
  */
 public final class CustomMenuDAO implements ICustomMenuDAO
 {
-	// Constants
-	private static final String SQL_QUERY_SELECT = "SELECT id_menu, name, bookmark, type, description FROM menus_custom_menu WHERE id_menu = ?";
-	private static final String SQL_QUERY_INSERT = "INSERT INTO menus_custom_menu ( name, bookmark, type, description ) VALUES ( ?, ?, ?, ? )";
-	private static final String SQL_QUERY_DELETE = "DELETE FROM menus_custom_menu WHERE id_menu = ?";
-	private static final String SQL_QUERY_UPDATE = "UPDATE menus_custom_menu SET name = ?, bookmark = ?, type = ?, description = ? WHERE id_menu = ?";
-	private static final String SQL_QUERY_SELECTALL = "SELECT id_menu, name, bookmark, type, description FROM menus_custom_menu";
-	private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_menu FROM menus_custom_menu";
-	private static final String SQL_QUERY_SELECT_BY_ID = "SELECT id_menu, name, bookmark, type, description FROM menus_custom_menu WHERE id_menu in ";
-	private static final String SQL_QUERY_COUNT_BOOKMARK = "SELECT count(bookmark) FROM menus_custom_menu WHERE bookmark= ?";
-	private static final String SQL_WHERE = "WHERE";
-	private static final String SQL_OR = "OR";
-	private static final String SQL_LIKE = "LIKE";
-	private static final String SQL_COLUMN_NAME = "name";
+    // Constants
+    private static final String SQL_QUERY_SELECT = "SELECT id_menu, name, bookmark, type, description FROM menus_custom_menu WHERE id_menu = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO menus_custom_menu ( name, bookmark, type, description ) VALUES ( ?, ?, ?, ? )";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM menus_custom_menu WHERE id_menu = ?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE menus_custom_menu SET name = ?, bookmark = ?, type = ?, description = ? WHERE id_menu = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_menu, name, bookmark, type, description FROM menus_custom_menu";
+    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_menu FROM menus_custom_menu";
+    private static final String SQL_QUERY_SELECT_BY_ID = "SELECT id_menu, name, bookmark, type, description FROM menus_custom_menu WHERE id_menu in ";
+    private static final String SQL_QUERY_COUNT_BOOKMARK = "SELECT count(bookmark) FROM menus_custom_menu WHERE bookmark= ?";
+    private static final String SQL_WHERE = "WHERE";
+    private static final String SQL_OR = "OR";
+    private static final String SQL_LIKE = "LIKE";
+    private static final String SQL_COLUMN_NAME = "name";
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	public void insert( CustomMenu customMenu, Plugin plugin )
-	{
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
-		{
-			int nIndex = 1;
-			daoUtil.setString( nIndex ++ , customMenu.getName( ) );
-			daoUtil.setString( nIndex ++ , customMenu.getBookmark( ) );
-			daoUtil.setString( nIndex ++ , customMenu.getType( ) );
-			daoUtil.setString( nIndex ++ , customMenu.getDescription( ) );
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void insert( CustomMenu customMenu, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
+        {
+            int nIndex = 1;
+            daoUtil.setString( nIndex++, customMenu.getName( ) );
+            daoUtil.setString( nIndex++, customMenu.getBookmark( ) );
+            daoUtil.setString( nIndex++, customMenu.getType( ) );
+            daoUtil.setString( nIndex++, customMenu.getDescription( ) );
 
-			daoUtil.executeUpdate( );
-			if( daoUtil.nextGeneratedKey( ) )
-			{
-				customMenu.setId( daoUtil.getGeneratedKeyInt( 1 ) );
-			}
-		}
-	}
+            daoUtil.executeUpdate( );
+            if ( daoUtil.nextGeneratedKey( ) )
+            {
+                customMenu.setId( daoUtil.getGeneratedKeyInt( 1 ) );
+            }
+        }
+    }
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	public CustomMenu load( int nKey, Plugin plugin )
-	{
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
-		{
-			daoUtil.setInt( 1, nKey );
-			daoUtil.executeQuery( );
-			CustomMenu customMenu = null;
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public CustomMenu load( int nKey, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
+        {
+            daoUtil.setInt( 1, nKey );
+            daoUtil.executeQuery( );
+            CustomMenu customMenu = null;
 
-			if( daoUtil.next( ) )
-			{
-				customMenu = new CustomMenu( );
-				int nIndex = 1;
+            if ( daoUtil.next( ) )
+            {
+                customMenu = new CustomMenu( );
+                int nIndex = 1;
 
-				customMenu.setId( daoUtil.getInt( nIndex ++ ) );
-				customMenu.setName( daoUtil.getString( nIndex ++ ) );
-				customMenu.setBookmark( daoUtil.getString( nIndex ++ ) );
-				customMenu.setType( daoUtil.getString( nIndex ++ ) );
-				customMenu.setDescription( daoUtil.getString( nIndex ++ ) );
-			}
+                customMenu.setId( daoUtil.getInt( nIndex++ ) );
+                customMenu.setName( daoUtil.getString( nIndex++ ) );
+                customMenu.setBookmark( daoUtil.getString( nIndex++ ) );
+                customMenu.setType( daoUtil.getString( nIndex++ ) );
+                customMenu.setDescription( daoUtil.getString( nIndex++ ) );
+            }
 
-			return customMenu;
-		}
-	}
+            return customMenu;
+        }
+    }
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	public void delete( int nKey, Plugin plugin )
-	{
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
-		{
-			daoUtil.setInt( 1, nKey );
-			daoUtil.executeUpdate( );
-		}
-	}
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void delete( int nKey, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nKey );
+            daoUtil.executeUpdate( );
+        }
+    }
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	public void store( CustomMenu customMenu, Plugin plugin )
-	{
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
-		{
-			int nIndex = 1;
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void store( CustomMenu customMenu, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {
+            int nIndex = 1;
 
-			daoUtil.setString( nIndex ++ , customMenu.getName( ) );
-			daoUtil.setString( nIndex ++ , customMenu.getBookmark( ) );
-			daoUtil.setString( nIndex ++ , customMenu.getType( ) );
-			daoUtil.setString( nIndex ++ , customMenu.getDescription( ) );
-			daoUtil.setInt( nIndex, customMenu.getId( ) );
+            daoUtil.setString( nIndex++, customMenu.getName( ) );
+            daoUtil.setString( nIndex++, customMenu.getBookmark( ) );
+            daoUtil.setString( nIndex++, customMenu.getType( ) );
+            daoUtil.setString( nIndex++, customMenu.getDescription( ) );
+            daoUtil.setInt( nIndex, customMenu.getId( ) );
 
-			daoUtil.executeUpdate( );
-		}
-	}
+            daoUtil.executeUpdate( );
+        }
+    }
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	public List < CustomMenu > selectAll( Plugin plugin )
-	{
-		List < CustomMenu > customMenuList = new ArrayList <>( );
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
-		{
-			daoUtil.executeQuery( );
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<CustomMenu> selectAll( Plugin plugin )
+    {
+        List<CustomMenu> customMenuList = new ArrayList<>( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
+        {
+            daoUtil.executeQuery( );
 
-			while( daoUtil.next( ) )
-			{
-				CustomMenu customMenu = new CustomMenu( );
-				int nIndex = 1;
+            while ( daoUtil.next( ) )
+            {
+                CustomMenu customMenu = new CustomMenu( );
+                int nIndex = 1;
 
-				customMenu.setId( daoUtil.getInt( nIndex ++ ) );
-				customMenu.setName( daoUtil.getString( nIndex ++ ) );
-				customMenu.setBookmark( daoUtil.getString( nIndex ++ ) );
-				customMenu.setType( daoUtil.getString( nIndex ++ ) );
-				customMenu.setDescription( daoUtil.getString( nIndex ++ ) );
+                customMenu.setId( daoUtil.getInt( nIndex++ ) );
+                customMenu.setName( daoUtil.getString( nIndex++ ) );
+                customMenu.setBookmark( daoUtil.getString( nIndex++ ) );
+                customMenu.setType( daoUtil.getString( nIndex++ ) );
+                customMenu.setDescription( daoUtil.getString( nIndex++ ) );
 
-				customMenuList.add( customMenu );
-			}
+                customMenuList.add( customMenu );
+            }
 
-			return customMenuList;
-		}
-	}
+            return customMenuList;
+        }
+    }
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	public List < CustomMenu > selectMenusListByIds( Plugin plugin, List < Integer > listIds )
-	{
-		List < CustomMenu > MenusList = new ArrayList <>( );
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<CustomMenu> selectMenusListByIds( Plugin plugin, List<Integer> listIds )
+    {
+        List<CustomMenu> MenusList = new ArrayList<>( );
 
-		StringBuilder builder = new StringBuilder( );
+        StringBuilder builder = new StringBuilder( );
 
-		if( ! listIds.isEmpty( ) )
-		{
-			for( int i = 0 ; i < listIds.size( ) ; i ++ )
-			{
-				builder.append( "?," );
-			}
+        if ( !listIds.isEmpty( ) )
+        {
+            for ( int i = 0; i < listIds.size( ); i++ )
+            {
+                builder.append( "?," );
+            }
 
-			final String placeHolders = builder.deleteCharAt( builder.length( ) - 1 ).toString( );
-			final String stmt = SQL_QUERY_SELECT_BY_ID + "(" + placeHolders + ")";
+            final String placeHolders = builder.deleteCharAt( builder.length( ) - 1 ).toString( );
+            final String stmt = SQL_QUERY_SELECT_BY_ID + "(" + placeHolders + ")";
 
-			try( final DAOUtil daoUtil = new DAOUtil( stmt, plugin ) )
-			{
-				int index = 1;
-				for( Integer n : listIds )
-				{
-					daoUtil.setInt( index ++ , n );
-				}
+            try ( final DAOUtil daoUtil = new DAOUtil( stmt, plugin ) )
+            {
+                int index = 1;
+                for ( Integer n : listIds )
+                {
+                    daoUtil.setInt( index++, n );
+                }
 
-				daoUtil.executeQuery( );
-				while( daoUtil.next( ) )
-				{
-					MenusList.add( getCustomMenu( daoUtil ) );
-				}
-			}
-		}
-		return MenusList;
-	}
+                daoUtil.executeQuery( );
+                while ( daoUtil.next( ) )
+                {
+                    MenusList.add( getCustomMenu( daoUtil ) );
+                }
+            }
+        }
+        return MenusList;
+    }
 
-	/**
-	 * get menu from DAO
-	 *
-	 * @param daoUtil
-	 * @return the menu
-	 */
-	private CustomMenu getCustomMenu( DAOUtil daoUtil )
-	{
-		CustomMenu menu = new CustomMenu( );
-		int nIndex = 1;
+    /**
+     * get menu from DAO
+     *
+     * @param daoUtil
+     * @return the menu
+     */
+    private CustomMenu getCustomMenu( DAOUtil daoUtil )
+    {
+        CustomMenu menu = new CustomMenu( );
+        int nIndex = 1;
 
-		menu.setId( daoUtil.getInt( nIndex ++ ) );
-		menu.setName( daoUtil.getString( nIndex ++ ) );
-		menu.setBookmark( daoUtil.getString( nIndex ++ ) );
-		menu.setType( daoUtil.getString( nIndex ++ ) );
-		menu.setDescription( daoUtil.getString( nIndex ++ ) );
+        menu.setId( daoUtil.getInt( nIndex++ ) );
+        menu.setName( daoUtil.getString( nIndex++ ) );
+        menu.setBookmark( daoUtil.getString( nIndex++ ) );
+        menu.setType( daoUtil.getString( nIndex++ ) );
+        menu.setDescription( daoUtil.getString( nIndex++ ) );
 
-		return menu;
-	}
+        return menu;
+    }
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	public List < Integer > selectIdMenusList( Plugin plugin )
-	{
-		List < Integer > menuList = new ArrayList < Integer >( );
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin ) )
-		{
-			daoUtil.executeQuery( );
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Integer> selectIdMenusList( Plugin plugin )
+    {
+        List<Integer> menuList = new ArrayList<Integer>( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin ) )
+        {
+            daoUtil.executeQuery( );
 
-			while( daoUtil.next( ) )
-			{
-				menuList.add( daoUtil.getInt( 1 ) );
-			}
-		}
-		return menuList;
-	}
+            while ( daoUtil.next( ) )
+            {
+                menuList.add( daoUtil.getInt( 1 ) );
+            }
+        }
+        return menuList;
+    }
 
-	@Override
-	public List < CustomMenu > selectMenusListByFilterCriteria( Plugin plugin, String strFilterCriteria )
-	{
+    @Override
+    public List<CustomMenu> selectMenusListByFilterCriteria( Plugin plugin, String strFilterCriteria )
+    {
 
-		if( StringUtils.isBlank( strFilterCriteria ) )
-		{
-			return selectAll( plugin );
-		}
+        if ( StringUtils.isBlank( strFilterCriteria ) )
+        {
+            return selectAll( plugin );
+        }
 
-		List < CustomMenu > MenusList = new ArrayList <>( );
+        List<CustomMenu> MenusList = new ArrayList<>( );
 
-		String strCleanFilterCriteria = strFilterCriteria.trim( );
+        String strCleanFilterCriteria = strFilterCriteria.trim( );
 
-		String strStatement = prepareStatement( strCleanFilterCriteria );
+        String strStatement = prepareStatement( strCleanFilterCriteria );
 
-		try( final DAOUtil daoUtil = new DAOUtil( strStatement, plugin ) )
-		{
-			int index = 1;
-			daoUtil.setString( index ++ , strCleanFilterCriteria );
+        try ( final DAOUtil daoUtil = new DAOUtil( strStatement, plugin ) )
+        {
+            int index = 1;
+            daoUtil.setString( index++, strCleanFilterCriteria );
 
-			for( String criteria : strCleanFilterCriteria.split( " " ) )
-			{
-				daoUtil.setString( index ++ , '%' + criteria + '%' );
-			}
+            for ( String criteria : strCleanFilterCriteria.split( " " ) )
+            {
+                daoUtil.setString( index++, '%' + criteria + '%' );
+            }
 
-			daoUtil.executeQuery( );
+            daoUtil.executeQuery( );
 
-			while( daoUtil.next( ) )
-			{
-				MenusList.add( getCustomMenu( daoUtil ) );
-			}
-		}
+            while ( daoUtil.next( ) )
+            {
+                MenusList.add( getCustomMenu( daoUtil ) );
+            }
+        }
 
-		return MenusList;
-	}
+        return MenusList;
+    }
 
-	private String prepareStatement( String strFilterCriteria )
-	{
-		StringBuilder strStatement = new StringBuilder( );
-		strStatement.append( SQL_QUERY_SELECTALL );
-		strStatement.append( ' ' + SQL_WHERE );
-		strStatement.append( ' ' + SQL_COLUMN_NAME + "= ?" );
+    private String prepareStatement( String strFilterCriteria )
+    {
+        StringBuilder strStatement = new StringBuilder( );
+        strStatement.append( SQL_QUERY_SELECTALL );
+        strStatement.append( ' ' + SQL_WHERE );
+        strStatement.append( ' ' + SQL_COLUMN_NAME + "= ?" );
 
-		for( String criteria : strFilterCriteria.split( " " ) )
-		{
-			strStatement.append( ' ' + SQL_OR );
-			strStatement.append( ' ' + SQL_COLUMN_NAME );
-			strStatement.append( ' ' + SQL_LIKE );
-			strStatement.append( " ?" );
-		}
+        for ( String criteria : strFilterCriteria.split( " " ) )
+        {
+            strStatement.append( ' ' + SQL_OR );
+            strStatement.append( ' ' + SQL_COLUMN_NAME );
+            strStatement.append( ' ' + SQL_LIKE );
+            strStatement.append( " ?" );
+        }
 
-		return strStatement.toString( );
-	}
+        return strStatement.toString( );
+    }
 
-	@Override
-	public Integer countBookmark( Plugin plugin, CustomMenu customMenu )
-	{
-		int nCount = 0;
+    @Override
+    public Integer countBookmark( Plugin plugin, CustomMenu customMenu )
+    {
+        int nCount = 0;
 
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_BOOKMARK, plugin ) )
-		{
-			daoUtil.setString( 1, customMenu.getBookmark( ) );
-			daoUtil.executeQuery( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_BOOKMARK, plugin ) )
+        {
+            daoUtil.setString( 1, customMenu.getBookmark( ) );
+            daoUtil.executeQuery( );
 
-			if( daoUtil.next( ) )
-			{
-				nCount = daoUtil.getInt( 1 );
-			}
-		}
+            if ( daoUtil.next( ) )
+            {
+                nCount = daoUtil.getInt( 1 );
+            }
+        }
 
-		return nCount;
-	}
+        return nCount;
+    }
 
 }

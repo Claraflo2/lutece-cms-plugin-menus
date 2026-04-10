@@ -76,8 +76,8 @@ public class MainTreeMenuAllPagesService
     public MenuItem getMainMenuItems( )
     {
         // Define the level of tree - utilise DatastoreService avec fallback sur AppPropertiesService
-        int nDepth = Integer.parseInt( DatastoreService.getDataValue( PROPERTY_DEPTH_MAIN_LEVEL_ALLPAGES, 
-                    AppPropertiesService.getProperty( PROPERTY_DEPTH_MAIN_LEVEL_ALLPAGES, "0" ) ) );
+        int nDepth = Integer.parseInt( DatastoreService.getDataValue( PROPERTY_DEPTH_MAIN_LEVEL_ALLPAGES,
+                AppPropertiesService.getProperty( PROPERTY_DEPTH_MAIN_LEVEL_ALLPAGES, "0" ) ) );
 
         String strCacheKey = _cacheService.getMainMenuCacheKey( );
         MenuItem root = (MenuItem) _cacheService.getFromCache( strCacheKey );
@@ -110,8 +110,8 @@ public class MainTreeMenuAllPagesService
             root = new MenuItem( );
 
             // Define the level of tree - utilise DatastoreService avec fallback sur AppPropertiesService
-            int nDepth = Integer.parseInt( DatastoreService.getDataValue( PROPERTY_DEPTH_TREE_LEVEL_ALLPAGES, 
-                        AppPropertiesService.getProperty( PROPERTY_DEPTH_TREE_LEVEL_ALLPAGES, "3" ) ) );
+            int nDepth = Integer.parseInt( DatastoreService.getDataValue( PROPERTY_DEPTH_TREE_LEVEL_ALLPAGES,
+                    AppPropertiesService.getProperty( PROPERTY_DEPTH_TREE_LEVEL_ALLPAGES, "3" ) ) );
 
             buildMenuTree( root, PortalService.getRootPageId( ), nDepth );
             _cacheService.putInCache( strCacheKey, root );
@@ -177,41 +177,43 @@ public class MainTreeMenuAllPagesService
             }
         }
     }
-    
-	/**
-	 * 
-	 * @return MenuItem root of tree
-	 */
-	public MenuItem getFullTreeMenuItems( )
-	{
-		int nRootId = PortalService.getRootPageId( );
-		MenuItem root = new MenuItem( );
-		root.setPage( PageHome.findByPrimaryKey( nRootId ) );
-		buildFullMenuTreeRecursive( root, nRootId );
-		return root;
-	}
 
-	/**
-	 *
-	 * @param item    MenuItem item
-	 * @param nPageId id of the currentPage
-	 */
-	private void buildFullMenuTreeRecursive( MenuItem item, int nPageId )
-	{
-		Collection < Page > listPages = PageHome.getChildPages( nPageId );
-		if( listPages == null || listPages.isEmpty( ) )
-		{
-			// No more child
-			return;
-		}
-		for( Page page : listPages )
-		{
-			MenuItem childItem = new MenuItem( );
-			childItem.setPage( PageHome.findByPrimaryKey( page.getId( ) ) );
-			item.addChild( childItem );
-			buildFullMenuTreeRecursive( childItem, page.getId( ) );
-		}
-	}
+    /**
+     * 
+     * @return MenuItem root of tree
+     */
+    public MenuItem getFullTreeMenuItems( )
+    {
+        int nRootId = PortalService.getRootPageId( );
+        MenuItem root = new MenuItem( );
+        root.setPage( PageHome.findByPrimaryKey( nRootId ) );
+        buildFullMenuTreeRecursive( root, nRootId );
+        return root;
+    }
+
+    /**
+     *
+     * @param item
+     *            MenuItem item
+     * @param nPageId
+     *            id of the currentPage
+     */
+    private void buildFullMenuTreeRecursive( MenuItem item, int nPageId )
+    {
+        Collection<Page> listPages = PageHome.getChildPages( nPageId );
+        if ( listPages == null || listPages.isEmpty( ) )
+        {
+            // No more child
+            return;
+        }
+        for ( Page page : listPages )
+        {
+            MenuItem childItem = new MenuItem( );
+            childItem.setPage( PageHome.findByPrimaryKey( page.getId( ) ) );
+            item.addChild( childItem );
+            buildFullMenuTreeRecursive( childItem, page.getId( ) );
+        }
+    }
 
     /**
      * Get the cacheService

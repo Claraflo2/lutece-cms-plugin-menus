@@ -51,7 +51,7 @@ public class MainTreeMenuService
     // ///////////////////////////////////////////////////////////////////////////////////////////
     // Constants
 
-	   // Properties
+    // Properties
     private static final String PROPERTY_DEPTH_MAIN_LEVEL = "menus.mainTreeMenu.depth.main";
     private static final String PROPERTY_DEPTH_TREE_LEVEL = "menus.mainTreeMenu.depth.tree";
 
@@ -76,9 +76,9 @@ public class MainTreeMenuService
     public MenuItem getMainMenuItems( )
     {
         // Define the level of tree - Use DatastoreService with fallback on AppPropertiesService
-        int nDepth = Integer.parseInt( DatastoreService.getDataValue( PROPERTY_DEPTH_MAIN_LEVEL, 
-                    AppPropertiesService.getProperty( PROPERTY_DEPTH_MAIN_LEVEL, "1" ) ) );
-        
+        int nDepth = Integer
+                .parseInt( DatastoreService.getDataValue( PROPERTY_DEPTH_MAIN_LEVEL, AppPropertiesService.getProperty( PROPERTY_DEPTH_MAIN_LEVEL, "1" ) ) );
+
         String strCacheKey = _cacheService.getMainMenuCacheKey( );
         MenuItem root = (MenuItem) _cacheService.getFromCache( strCacheKey );
 
@@ -113,36 +113,35 @@ public class MainTreeMenuService
             root = new MenuItem( );
 
             // Define the level of tree - utilise DatastoreService avec fallback sur AppPropertiesService
-            int nDepth = Integer.parseInt( DatastoreService.getDataValue( PROPERTY_DEPTH_TREE_LEVEL, 
-                        AppPropertiesService.getProperty( PROPERTY_DEPTH_TREE_LEVEL, "0" ) ) );
+            int nDepth = Integer
+                    .parseInt( DatastoreService.getDataValue( PROPERTY_DEPTH_TREE_LEVEL, AppPropertiesService.getProperty( PROPERTY_DEPTH_TREE_LEVEL, "0" ) ) );
 
             if ( nDepth > 2 )
             {
                 nDepth = 2;
             }
-            
-            
+
             int nRootId = PortalService.getRootPageId( );
-            
-            //If page_id=0, then use root site page as root of the generated tree menu. The page id=0 doesn't exist physically as a page. But, in frontend,
-            // you can access to Homepage with the url <site_path>?page_id=0. 
-            if( nCurrentPageId==0 || nCurrentPageId==nRootId ) 
+
+            // If page_id=0, then use root site page as root of the generated tree menu. The page id=0 doesn't exist physically as a page. But, in frontend,
+            // you can access to Homepage with the url <site_path>?page_id=0.
+            if ( nCurrentPageId == 0 || nCurrentPageId == nRootId )
             {
-            	//Add only child pages of the root. THe page root doesn't appear in tree menu
-            	buildMenuTree( root, nRootId, nDepth );
+                // Add only child pages of the root. THe page root doesn't appear in tree menu
+                buildMenuTree( root, nRootId, nDepth );
             }
             else
             {
-            	//Add currentPage in menu
-        		MenuItem menuItem = new MenuItem( );
+                // Add currentPage in menu
+                MenuItem menuItem = new MenuItem( );
                 menuItem.setPage( PageHome.findByPrimaryKey( nCurrentPageId ) );
                 root.addChild( menuItem );
-            	
-                //Add its child pages
+
+                // Add its child pages
                 MenuItem childRoot = root.getChilds( ).get( 0 );
-            	buildMenuTree( childRoot, nCurrentPageId, nDepth );
+                buildMenuTree( childRoot, nCurrentPageId, nDepth );
             }
-            
+
             _cacheService.putInCache( strCacheKey, root );
         }
 

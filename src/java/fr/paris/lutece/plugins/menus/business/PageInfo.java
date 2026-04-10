@@ -42,92 +42,92 @@ import fr.paris.lutece.portal.business.page.Page;
  */
 public class PageInfo implements Serializable
 {
-	private static final long serialVersionUID = 1106190081472015466L;
-	private int _nId;
-	private String _strName;
-	private String _strDescription;
-	private int _nParentPageId;
+    private static final long serialVersionUID = 1106190081472015466L;
+    private int _nId;
+    private String _strName;
+    private String _strDescription;
+    private int _nParentPageId;
 
-	/**
-	 * Contructor
-	 * 
-	 * @param page
-	 *             the corresponding page instance
-	 */
-	PageInfo( Page page )
-	{
-		_nId = page.getId( );
-		_strName = page.getName( );
-		_strDescription = page.getDescription( );
-		_nParentPageId = page.getParentPageId( );
-	}
+    /**
+     * Contructor
+     * 
+     * @param page
+     *            the corresponding page instance
+     */
+    PageInfo( Page page )
+    {
+        _nId = page.getId( );
+        _strName = page.getName( );
+        _strDescription = page.getDescription( );
+        _nParentPageId = page.getParentPageId( );
+    }
 
-	/**
-	 * @return the id
-	 */
-	public int getId( )
-	{
-		return _nId;
-	}
+    /**
+     * @return the id
+     */
+    public int getId( )
+    {
+        return _nId;
+    }
 
-	/**
-	 * @param id
-	 *           the id to set
-	 */
-	public void setId( int id )
-	{
-		_nId = id;
-	}
+    /**
+     * @param id
+     *            the id to set
+     */
+    public void setId( int id )
+    {
+        _nId = id;
+    }
 
-	/**
-	 * @return the name
-	 */
-	public String getName( )
-	{
-		return _strName;
-	}
+    /**
+     * @return the name
+     */
+    public String getName( )
+    {
+        return _strName;
+    }
 
-	/**
-	 * @param name
-	 *             the name to set
-	 */
-	public void setName( String name )
-	{
-		_strName = name;
-	}
+    /**
+     * @param name
+     *            the name to set
+     */
+    public void setName( String name )
+    {
+        _strName = name;
+    }
 
-	/**
-	 * @return the description
-	 */
-	public String getDescription( )
-	{
-		return _strDescription;
-	}
+    /**
+     * @return the description
+     */
+    public String getDescription( )
+    {
+        return _strDescription;
+    }
 
-	/**
-	 * @param description
-	 *                    the description to set
-	 */
-	public void setDescription( String description )
-	{
-		_strDescription = description;
-	}
+    /**
+     * @param description
+     *            the description to set
+     */
+    public void setDescription( String description )
+    {
+        _strDescription = description;
+    }
 
-	/**
-	 * @return the id
-	 */
-	public int getParentPageId( )
-	{
-		return _nParentPageId;
-	}
+    /**
+     * @return the id
+     */
+    public int getParentPageId( )
+    {
+        return _nParentPageId;
+    }
 
-	/**
-	 * @param nParentPageId
-	 *                      the id to set
-	 */
-	public void setParentPageId( int nParentPageId )
-	{
-		_nParentPageId = nParentPageId;
-	}
+    /**
+     * @param nParentPageId
+     *            the id to set
+     */
+    public void setParentPageId( int nParentPageId )
+    {
+        _nParentPageId = nParentPageId;
+    }
 
 }

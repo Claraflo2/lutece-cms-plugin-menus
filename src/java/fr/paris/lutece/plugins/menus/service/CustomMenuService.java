@@ -45,7 +45,6 @@ import fr.paris.lutece.portal.web.xpages.XPageApplicationEntry;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
-
 public class CustomMenuService
 {
     public static final int MODE_SITE = 0;
@@ -53,7 +52,6 @@ public class CustomMenuService
     public static final String MARKER_SITE_PATH = "site_path";
 
     private static CustomMenuService _singleton = new CustomMenuService( );
-
 
     /**
      * Returns the instance of the singleton
@@ -83,145 +81,146 @@ public class CustomMenuService
 
         return strSitePath;
     }
-    
-	/**
-	 * Check if an item match with filter criteria
-	 * 
-	 * @param strItemToTest
-	 *                      Item to test
-	 * @return the reference list
-	 */
-	private boolean isSearchCriteriaValidated( String strItemToTest, String strFilterCriteria )
-	{
 
-		if( StringUtils.isBlank( strFilterCriteria ) )
-		{
-			return true;
-		}
+    /**
+     * Check if an item match with filter criteria
+     * 
+     * @param strItemToTest
+     *            Item to test
+     * @return the reference list
+     */
+    private boolean isSearchCriteriaValidated( String strItemToTest, String strFilterCriteria )
+    {
 
-		String strCleanCriteria = strFilterCriteria.trim( );
-		Boolean isValid = Strings.CS.equals( strCleanCriteria, strItemToTest );
+        if ( StringUtils.isBlank( strFilterCriteria ) )
+        {
+            return true;
+        }
 
-		for( String criteria : strCleanCriteria.split( " " ) )
-		{
-			isValid |=  Strings.CS.contains( strItemToTest, criteria );
-		}
+        String strCleanCriteria = strFilterCriteria.trim( );
+        Boolean isValid = Strings.CS.equals( strCleanCriteria, strItemToTest );
 
-		return isValid;
-	}
-	
-	// ////////////////////////////////////////////
-	// ///////////GETTERS REFERENCE LISTS//////////
-	// ////////////////////////////////////////////
-	
- 	
-	/**
-	 * Get the available menus reference list
-	 * 
-	 * @return the reference list
-	 */
-	public ReferenceList getAvailableMenusReferenceList( CustomMenu currentCustomMenu, String strFilterCriteria )
-	{
-		ReferenceList referenceList = new ReferenceList( );
-		Integer nId = currentCustomMenu != null ? currentCustomMenu.getId( ) : - 1;
+        for ( String criteria : strCleanCriteria.split( " " ) )
+        {
+            isValid |= Strings.CS.contains( strItemToTest, criteria );
+        }
 
-		for( CustomMenu menu : CustomMenuHome.findAllWithCriteria( strFilterCriteria ) )
-		{
-			if( menu.getId( ) != nId )
-			{
-				referenceList.addItem( menu.getId( ), menu.getName( ) );
-			}
-		}
+        return isValid;
+    }
 
-		return referenceList;
-	}
+    // ////////////////////////////////////////////
+    // ///////////GETTERS REFERENCE LISTS//////////
+    // ////////////////////////////////////////////
 
-	/**
-	 * Get the available xpages reference list
-	 * 
-	 * @return the reference list
-	 */
-	public ReferenceList getAvailableXpagesReferenceList( String strFilterCriteria )
-	{
+    /**
+     * Get the available menus reference list
+     * 
+     * @return the reference list
+     */
+    public ReferenceList getAvailableMenusReferenceList( CustomMenu currentCustomMenu, String strFilterCriteria )
+    {
+        ReferenceList referenceList = new ReferenceList( );
+        Integer nId = currentCustomMenu != null ? currentCustomMenu.getId( ) : -1;
 
-		ReferenceList referenceList = new ReferenceList( );
+        for ( CustomMenu menu : CustomMenuHome.findAllWithCriteria( strFilterCriteria ) )
+        {
+            if ( menu.getId( ) != nId )
+            {
+                referenceList.addItem( menu.getId( ), menu.getName( ) );
+            }
+        }
 
-		// Scan of the list
-		for( XPageApplicationEntry entry : XPageAppService.getXPageApplicationsList( ) )
-		{
-			if( entry.isEnable( ) && isSearchCriteriaValidated( entry.getId( ), strFilterCriteria ) )
-			{
-				referenceList.addItem( entry.getId( ), entry.getId( ) );
-			}
-		}
+        return referenceList;
+    }
 
-		return referenceList;
-	}
-	
-	 /**
-	 * Get the available menus reference list
-	 * 
-	 * @return the reference list
-	 */
-	public ReferenceList getAvailablePagesReferenceList( String strFilterCriteria )
-	{
-		MenuItem root = MainTreeMenuAllPagesService.getInstance( ).getFullTreeMenuItems( );
-	
-		ReferenceList referenceList = new ReferenceList( );
-	
-		if( root != null )
-		{
-			traverseItem( root, referenceList, strFilterCriteria );
-		}
-	
-		return referenceList;
-	}
+    /**
+     * Get the available xpages reference list
+     * 
+     * @return the reference list
+     */
+    public ReferenceList getAvailableXpagesReferenceList( String strFilterCriteria )
+    {
 
-	/**
-	 * Recursive methode to get all pages
-	 * 
-	 * @param MenuItem      Each Item containing a page
-	 * @param ReferenceList ReferenceList with all pages
-	 */
-	private void traverseItem( MenuItem item, ReferenceList referenceList, String strFilterCriteria )
-	{
-		if( item != null )
-		{
+        ReferenceList referenceList = new ReferenceList( );
 
-			if( item.getPage( ) != null && ( isSearchCriteriaValidated( item.getPage( ).getName( ), strFilterCriteria )
-					|| isSearchCriteriaValidated( item.getPage( ).getDescription( ), strFilterCriteria )
-					|| isSearchCriteriaValidated( String.valueOf( item.getPage( ).getId( ) ), strFilterCriteria ) ) )
-			{
-				String name = item.getPage( ).getName( ) != null ? item.getPage( ).getName( ) : "";
-				String description = item.getPage( ).getDescription( ) != null ? item.getPage( ).getDescription( ) : "";
-				String value = name + " - " + description;
+        // Scan of the list
+        for ( XPageApplicationEntry entry : XPageAppService.getXPageApplicationsList( ) )
+        {
+            if ( entry.isEnable( ) && isSearchCriteriaValidated( entry.getId( ), strFilterCriteria ) )
+            {
+                referenceList.addItem( entry.getId( ), entry.getId( ) );
+            }
+        }
 
-				referenceList.addItem( item.getPage( ).getId( ), value );
-			}
+        return referenceList;
+    }
 
-			if( item.getChilds( ) != null )
-			{
-				for( MenuItem child : item.getChilds( ) )
-				{
-					traverseItem( child, referenceList, strFilterCriteria );
-				}
-			}
-		}
-	}
+    /**
+     * Get the available menus reference list
+     * 
+     * @return the reference list
+     */
+    public ReferenceList getAvailablePagesReferenceList( String strFilterCriteria )
+    {
+        MenuItem root = MainTreeMenuAllPagesService.getInstance( ).getFullTreeMenuItems( );
 
-	public String getLabelPageById( String strSourceItemId )
-	{
-			
-			ReferenceList listPages = getAvailablePagesReferenceList( "" ) ;
-			
-			for( ReferenceItem page : listPages)
-			{
-				if(  Strings.CS.equals( strSourceItemId, page.getCode( ) ) )
-				{
-					return page.getName( );
-				}
-			}
-			
-			return "";
-	}
+        ReferenceList referenceList = new ReferenceList( );
+
+        if ( root != null )
+        {
+            traverseItem( root, referenceList, strFilterCriteria );
+        }
+
+        return referenceList;
+    }
+
+    /**
+     * Recursive methode to get all pages
+     * 
+     * @param MenuItem
+     *            Each Item containing a page
+     * @param ReferenceList
+     *            ReferenceList with all pages
+     */
+    private void traverseItem( MenuItem item, ReferenceList referenceList, String strFilterCriteria )
+    {
+        if ( item != null )
+        {
+
+            if ( item.getPage( ) != null && ( isSearchCriteriaValidated( item.getPage( ).getName( ), strFilterCriteria )
+                    || isSearchCriteriaValidated( item.getPage( ).getDescription( ), strFilterCriteria )
+                    || isSearchCriteriaValidated( String.valueOf( item.getPage( ).getId( ) ), strFilterCriteria ) ) )
+            {
+                String name = item.getPage( ).getName( ) != null ? item.getPage( ).getName( ) : "";
+                String description = item.getPage( ).getDescription( ) != null ? item.getPage( ).getDescription( ) : "";
+                String value = name + " - " + description;
+
+                referenceList.addItem( item.getPage( ).getId( ), value );
+            }
+
+            if ( item.getChilds( ) != null )
+            {
+                for ( MenuItem child : item.getChilds( ) )
+                {
+                    traverseItem( child, referenceList, strFilterCriteria );
+                }
+            }
+        }
+    }
+
+    public String getLabelPageById( String strSourceItemId )
+    {
+
+        ReferenceList listPages = getAvailablePagesReferenceList( "" );
+
+        for ( ReferenceItem page : listPages )
+        {
+            if ( Strings.CS.equals( strSourceItemId, page.getCode( ) ) )
+            {
+                return page.getName( );
+            }
+        }
+
+        return "";
+    }
 }

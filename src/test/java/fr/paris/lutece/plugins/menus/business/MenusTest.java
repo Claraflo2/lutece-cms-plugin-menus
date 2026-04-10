@@ -32,6 +32,7 @@
  * License 1.0
  */
 package fr.paris.lutece.plugins.menus.business;
+
 import org.junit.Test;
 
 import fr.paris.lutece.test.LuteceTestCase;

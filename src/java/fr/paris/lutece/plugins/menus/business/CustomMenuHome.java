@@ -42,155 +42,147 @@ import java.util.List;
 import org.apache.commons.lang3.Strings;
 
 /**
- * This class provides instances management methods (create, find, ...) for
- * CustomMenu objects
+ * This class provides instances management methods (create, find, ...) for CustomMenu objects
  */
 public final class CustomMenuHome
 {
-	// Static variable pointed at the DAO instance
-	private static ICustomMenuDAO _dao = SpringContextService.getBean( "menus.customMenuDAO" );
-	private static ICustomMenuItemDAO _daoItem = SpringContextService.getBean( "menus.customMenuItemDAO" );
-	private static Plugin _plugin = PluginService.getPlugin( "menus" );
+    // Static variable pointed at the DAO instance
+    private static ICustomMenuDAO _dao = SpringContextService.getBean( "menus.customMenuDAO" );
+    private static ICustomMenuItemDAO _daoItem = SpringContextService.getBean( "menus.customMenuItemDAO" );
+    private static Plugin _plugin = PluginService.getPlugin( "menus" );
 
-	/**
-	 * Private constructor - this class need not be instantiated
-	 */
-	private CustomMenuHome( )
-	{
-	}
+    /**
+     * Private constructor - this class need not be instantiated
+     */
+    private CustomMenuHome( )
+    {
+    }
 
-	/**
-	 * Create an instance of the customMenu class
-	 * 
-	 * @param customMenu
-	 *                   The instance of the CustomMenu which contains the
-	 *                   informations to store
-	 * @return The instance of customMenu which has been created with its primary
-	 *         key.
-	 */
-	public static CustomMenu create( CustomMenu customMenu )
-	{
-		_dao.insert( customMenu, _plugin );
+    /**
+     * Create an instance of the customMenu class
+     * 
+     * @param customMenu
+     *            The instance of the CustomMenu which contains the informations to store
+     * @return The instance of customMenu which has been created with its primary key.
+     */
+    public static CustomMenu create( CustomMenu customMenu )
+    {
+        _dao.insert( customMenu, _plugin );
 
-		return customMenu;
-	}
+        return customMenu;
+    }
 
-	/**
-	 * Update of the customMenu which is specified in parameter
-	 * 
-	 * @param customMenu
-	 *                   The instance of the CustomMenu which contains the data to
-	 *                   store
-	 * @return The instance of the customMenu which has been updated
-	 */
-	public static CustomMenu update( CustomMenu customMenu )
-	{
-		_dao.store( customMenu, _plugin );
+    /**
+     * Update of the customMenu which is specified in parameter
+     * 
+     * @param customMenu
+     *            The instance of the CustomMenu which contains the data to store
+     * @return The instance of the customMenu which has been updated
+     */
+    public static CustomMenu update( CustomMenu customMenu )
+    {
+        _dao.store( customMenu, _plugin );
 
-		return customMenu;
-	}
+        return customMenu;
+    }
 
-	/**
-	 * Remove the customMenu whose identifier is specified in parameter
-	 * 
-	 * @param nKey
-	 *             The customMenu Id
-	 */
-	public static void remove( int nKey )
-	{
-		// Remove all items of the menu first
-		_daoItem.deleteByMenuId( nKey, _plugin );
+    /**
+     * Remove the customMenu whose identifier is specified in parameter
+     * 
+     * @param nKey
+     *            The customMenu Id
+     */
+    public static void remove( int nKey )
+    {
+        // Remove all items of the menu first
+        _daoItem.deleteByMenuId( nKey, _plugin );
 
-		// Remove this menu in other menu (subMenu item)
-		_daoItem.deleteSubMenuItemBySubMenuId( nKey, _plugin );
+        // Remove this menu in other menu (subMenu item)
+        _daoItem.deleteSubMenuItemBySubMenuId( nKey, _plugin );
 
-		// Then remove the menu
-		_dao.delete( nKey, _plugin );
-	}
+        // Then remove the menu
+        _dao.delete( nKey, _plugin );
+    }
 
-	/**
-	 * Returns an instance of a customMenu whose identifier is specified in
-	 * parameter
-	 * 
-	 * @param nKey
-	 *             The customMenu primary key
-	 * @return an instance of CustomMenu
-	 */
-	public static CustomMenu findByPrimaryKey( int nKey )
-	{
-		return _dao.load( nKey, _plugin );
+    /**
+     * Returns an instance of a customMenu whose identifier is specified in parameter
+     * 
+     * @param nKey
+     *            The customMenu primary key
+     * @return an instance of CustomMenu
+     */
+    public static CustomMenu findByPrimaryKey( int nKey )
+    {
+        return _dao.load( nKey, _plugin );
 
-	}
+    }
 
-	/**
-	 * Load the data of all the customMenu objects and returns them in form of a
-	 * collection
-	 * 
-	 * @return the collection which contains the data of all the customMenu objects
-	 */
-	public static List < CustomMenu > getCustomMenusList( )
-	{
-		return _dao.selectAll( _plugin );
-	}
+    /**
+     * Load the data of all the customMenu objects and returns them in form of a collection
+     * 
+     * @return the collection which contains the data of all the customMenu objects
+     */
+    public static List<CustomMenu> getCustomMenusList( )
+    {
+        return _dao.selectAll( _plugin );
+    }
 
-	/**
-	 * Load the id of all the customMenu objects and returns them as a list
-	 * 
-	 * @return the list which contains the id of all the customMenu objects
-	 */
-	public static List < Integer > getIdMenusList( )
-	{
-		return _dao.selectIdMenusList( _plugin );
-	}
+    /**
+     * Load the id of all the customMenu objects and returns them as a list
+     * 
+     * @return the list which contains the id of all the customMenu objects
+     */
+    public static List<Integer> getIdMenusList( )
+    {
+        return _dao.selectIdMenusList( _plugin );
+    }
 
-	/**
-	 * Load the id of all the customMenu objects containing in listIds and returns
-	 * them as a list
-	 * 
-	 * @param nKey
-	 *             The customMenu primary key
-	 * @return the list which contains the id of all the customMenu objects
-	 */
-	public static List < CustomMenu > getMenusListByIds( List < Integer > listIds )
-	{
-		return _dao.selectMenusListByIds( _plugin, listIds );
-	}
+    /**
+     * Load the id of all the customMenu objects containing in listIds and returns them as a list
+     * 
+     * @param nKey
+     *            The customMenu primary key
+     * @return the list which contains the id of all the customMenu objects
+     */
+    public static List<CustomMenu> getMenusListByIds( List<Integer> listIds )
+    {
+        return _dao.selectMenusListByIds( _plugin, listIds );
+    }
 
-	/**
-	 * Load a filtered list of customMenu objects and returns them as a list
-	 * 
-	 * @param strFilterCriteria
-	 *                          Filter criteria
-	 * @return the filtered list of customMenu objects
-	 */
-	public static List < CustomMenu > findAllWithCriteria( String strFilterCriteria )
-	{
-		return _dao.selectMenusListByFilterCriteria( _plugin, strFilterCriteria );
-	}
+    /**
+     * Load a filtered list of customMenu objects and returns them as a list
+     * 
+     * @param strFilterCriteria
+     *            Filter criteria
+     * @return the filtered list of customMenu objects
+     */
+    public static List<CustomMenu> findAllWithCriteria( String strFilterCriteria )
+    {
+        return _dao.selectMenusListByFilterCriteria( _plugin, strFilterCriteria );
+    }
 
-	/**
-	 * Return if bookmark is unique or not
-	 * 
-	 * @param customMenu
-	 *                    instance of the CustomMenu object to insert
-	 * @param bIsCreation
-	 *                    is creation mode or not
-	 * @return True if bookmark is unique or false else.
-	 */
-	public static Boolean isUniqueBookmark( CustomMenu customMenu, Boolean bIsCreation )
-	{
+    /**
+     * Return if bookmark is unique or not
+     * 
+     * @param customMenu
+     *            instance of the CustomMenu object to insert
+     * @param bIsCreation
+     *            is creation mode or not
+     * @return True if bookmark is unique or false else.
+     */
+    public static Boolean isUniqueBookmark( CustomMenu customMenu, Boolean bIsCreation )
+    {
 
-		Integer nCount = _dao.countBookmark( _plugin, customMenu );
+        Integer nCount = _dao.countBookmark( _plugin, customMenu );
 
-		if( bIsCreation )
-		{
-			return nCount == 0;
-		}
-		else
-		{
-			CustomMenu oldCustomMenu = _dao.load( customMenu.getId( ), _plugin );
-			return nCount == 0
-					|| ( nCount == 1 &&  Strings.CS.equals( oldCustomMenu.getBookmark( ), customMenu.getBookmark( ) ) );
-		}
-	}
+        if ( bIsCreation )
+        {
+            return nCount == 0;
+        }
+        else
+        {
+            CustomMenu oldCustomMenu = _dao.load( customMenu.getId( ), _plugin );
+            return nCount == 0 || ( nCount == 1 && Strings.CS.equals( oldCustomMenu.getBookmark( ), customMenu.getBookmark( ) ) );
+        }
+    }
 }

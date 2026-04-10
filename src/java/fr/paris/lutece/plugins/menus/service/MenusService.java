@@ -85,5 +85,5 @@ public class MenusService
         }
 
         return strSitePath;
-    }   
+    }
 }

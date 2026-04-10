@@ -44,49 +44,49 @@ import java.util.List;
  */
 public class MenuItem implements Serializable
 {
-	private static final long serialVersionUID = 2672166049242627079L;
-	private PageInfo _page;
-	private final List < MenuItem > _listItems = new ArrayList < MenuItem >( );
+    private static final long serialVersionUID = 2672166049242627079L;
+    private PageInfo _page;
+    private final List<MenuItem> _listItems = new ArrayList<MenuItem>( );
 
-	/**
-	 * Returns the Page
-	 * 
-	 * @return The Page
-	 */
-	public PageInfo getPage( )
-	{
-		return _page;
-	}
+    /**
+     * Returns the Page
+     * 
+     * @return The Page
+     */
+    public PageInfo getPage( )
+    {
+        return _page;
+    }
 
-	/**
-	 * Sets the Page
-	 * 
-	 * @param page
-	 *             The Page
-	 */
-	public void setPage( Page page )
-	{
-		_page = new PageInfo( page );
-	}
+    /**
+     * Sets the Page
+     * 
+     * @param page
+     *            The Page
+     */
+    public void setPage( Page page )
+    {
+        _page = new PageInfo( page );
+    }
 
-	/**
-	 * Add child
-	 * 
-	 * @param item
-	 *             Child
-	 */
-	public void addChild( MenuItem item )
-	{
-		_listItems.add( item );
-	}
+    /**
+     * Add child
+     * 
+     * @param item
+     *            Child
+     */
+    public void addChild( MenuItem item )
+    {
+        _listItems.add( item );
+    }
 
-	/**
-	 * Gets list of childs
-	 * 
-	 * @return The list of childs
-	 */
-	public List < MenuItem > getChilds( )
-	{
-		return _listItems;
-	}
+    /**
+     * Gets list of childs
+     * 
+     * @return The list of childs
+     */
+    public List<MenuItem> getChilds( )
+    {
+        return _listItems;
+    }
 }
