@@ -54,192 +54,190 @@ import org.apache.commons.lang3.Strings;
 @ApplicationScoped
 public class CustomMenuService
 {
-	public static final int MODE_SITE = 0;
-	public static final int MODE_ADMIN = 1;
-	public static final String MARKER_SITE_PATH = "site_path";
+    public static final int MODE_SITE = 0;
+    public static final int MODE_ADMIN = 1;
+    public static final String MARKER_SITE_PATH = "site_path";
 
-	@Inject
-	private MainTreeMenuAllPagesService _mainTreeMenuAllPagesService;
+    @Inject
+    private MainTreeMenuAllPagesService _mainTreeMenuAllPagesService;
 
-	/**
-	 * Define the site path : Portal Url when mode isn't admin mode, otherwise
-	 * AdminPortalUrl
-	 * 
-	 * @param nMode
-	 *              the mode define by the request
-	 * @return site path depending on the mode
-	 */
-	public String getSitePath( int nMode )
-	{
-		String strSitePath = AppPathService.getAdminPortalUrl( );
+    /**
+     * Define the site path : Portal Url when mode isn't admin mode, otherwise AdminPortalUrl
+     * 
+     * @param nMode
+     *            the mode define by the request
+     * @return site path depending on the mode
+     */
+    public String getSitePath( int nMode )
+    {
+        String strSitePath = AppPathService.getAdminPortalUrl( );
 
-		if( nMode != MODE_ADMIN )
-		{
-			strSitePath = AppPathService.getPortalUrl( );
-		}
+        if ( nMode != MODE_ADMIN )
+        {
+            strSitePath = AppPathService.getPortalUrl( );
+        }
 
-		return strSitePath;
-	}
+        return strSitePath;
+    }
 
-	/**
-	 * Check if an item match with filter criteria
-	 * 
-	 * @param strItemToTest
-	 *                      Item to test
-	 * @return the reference list
-	 */
-	private boolean isSearchCriteriaValidated( String strItemToTest, String strFilterCriteria )
-	{
+    /**
+     * Check if an item match with filter criteria
+     * 
+     * @param strItemToTest
+     *            Item to test
+     * @return the reference list
+     */
+    private boolean isSearchCriteriaValidated( String strItemToTest, String strFilterCriteria )
+    {
 
-		if( StringUtils.isBlank( strFilterCriteria ) )
-		{
-			return true;
-		}
+        if ( StringUtils.isBlank( strFilterCriteria ) )
+        {
+            return true;
+        }
 
-		String strCleanCriteria = strFilterCriteria.trim( );
-		Boolean isValid = Strings.CS.equals( strCleanCriteria, strItemToTest );
+        String strCleanCriteria = strFilterCriteria.trim( );
+        Boolean isValid = Strings.CS.equals( strCleanCriteria, strItemToTest );
 
-		for( String criteria : strCleanCriteria.split( " " ) )
-		{
-			isValid |= Strings.CS.contains( strItemToTest, criteria );
-		}
+        for ( String criteria : strCleanCriteria.split( " " ) )
+        {
+            isValid |= Strings.CS.contains( strItemToTest, criteria );
+        }
 
-		return isValid;
-	}
+        return isValid;
+    }
 
-	// ////////////////////////////////////////////
-	// ///////////GETTERS REFERENCE LISTS//////////
-	// ////////////////////////////////////////////
+    // ////////////////////////////////////////////
+    // ///////////GETTERS REFERENCE LISTS//////////
+    // ////////////////////////////////////////////
 
-	/**
-	 * Get the available menus reference list
-	 * 
-	 * @return the reference list
-	 */
-	public ReferenceList getAvailableMenusReferenceList( CustomMenu currentCustomMenu, String strFilterCriteria )
-	{
-		ReferenceList referenceList = new ReferenceList( );
-		Integer nId = currentCustomMenu != null ? currentCustomMenu.getId( ) : - 1;
+    /**
+     * Get the available menus reference list
+     * 
+     * @return the reference list
+     */
+    public ReferenceList getAvailableMenusReferenceList( CustomMenu currentCustomMenu, String strFilterCriteria )
+    {
+        ReferenceList referenceList = new ReferenceList( );
+        Integer nId = currentCustomMenu != null ? currentCustomMenu.getId( ) : -1;
 
-		for( CustomMenu menu : CustomMenuHome.findAllWithCriteria( strFilterCriteria ) )
-		{
-			if( menu.getId( ) != nId )
-			{
-				referenceList.addItem( menu.getId( ), menu.getName( ) );
-			}
-		}
+        for ( CustomMenu menu : CustomMenuHome.findAllWithCriteria( strFilterCriteria ) )
+        {
+            if ( menu.getId( ) != nId )
+            {
+                referenceList.addItem( menu.getId( ), menu.getName( ) );
+            }
+        }
 
-		return referenceList;
-	}
+        return referenceList;
+    }
 
-	/**
-	 * Get the available xpages reference list
-	 * 
-	 * @return the reference list
-	 */
-	public ReferenceList getAvailableXpagesReferenceList( String strFilterCriteria )
-	{
+    /**
+     * Get the available xpages reference list
+     * 
+     * @return the reference list
+     */
+    public ReferenceList getAvailableXpagesReferenceList( String strFilterCriteria )
+    {
 
-		ReferenceList referenceList = new ReferenceList( );
+        ReferenceList referenceList = new ReferenceList( );
 
-		// Scan of the list
-		for( XPageApplicationEntry entry : XPageAppService.getXPageApplicationsList( ) )
-		{
-			if( entry.isEnable( ) && isSearchCriteriaValidated( entry.getId( ), strFilterCriteria ) )
-			{
-				referenceList.addItem( entry.getId( ), entry.getId( ) );
-			}
-		}
+        // Scan of the list
+        for ( XPageApplicationEntry entry : XPageAppService.getXPageApplicationsList( ) )
+        {
+            if ( entry.isEnable( ) && isSearchCriteriaValidated( entry.getId( ), strFilterCriteria ) )
+            {
+                referenceList.addItem( entry.getId( ), entry.getId( ) );
+            }
+        }
 
-		return referenceList;
-	}
+        return referenceList;
+    }
 
-	/**
-	 * Get the available menus reference list
-	 * 
-	 * @return the reference list
-	 */
-	public ReferenceList getAvailablePagesReferenceList( String strFilterCriteria )
-	{
-		MenuItem root = _mainTreeMenuAllPagesService.getFullTreeMenuItems( );
+    /**
+     * Get the available menus reference list
+     * 
+     * @return the reference list
+     */
+    public ReferenceList getAvailablePagesReferenceList( String strFilterCriteria )
+    {
+        MenuItem root = _mainTreeMenuAllPagesService.getFullTreeMenuItems( );
 
-		ReferenceList referenceList = new ReferenceList( );
+        ReferenceList referenceList = new ReferenceList( );
 
-		if( root != null )
-		{
-			traverseItem( root, referenceList, strFilterCriteria );
-		}
+        if ( root != null )
+        {
+            traverseItem( root, referenceList, strFilterCriteria );
+        }
 
-		return referenceList;
-	}
+        return referenceList;
+    }
 
-	/**
-	 * Recursive methode to get all pages
-	 * 
-	 * @param MenuItem      Each Item containing a page
-	 * @param ReferenceList ReferenceList with all pages
-	 */
-	private void traverseItem( MenuItem item, ReferenceList referenceList, String strFilterCriteria )
-	{
-		if( item != null )
-		{
+    /**
+     * Recursive methode to get all pages
+     * 
+     * @param MenuItem
+     *            Each Item containing a page
+     * @param ReferenceList
+     *            ReferenceList with all pages
+     */
+    private void traverseItem( MenuItem item, ReferenceList referenceList, String strFilterCriteria )
+    {
+        if ( item != null )
+        {
 
-			if( item.getPage( ) != null && ( isSearchCriteriaValidated( item.getPage( ).getName( ), strFilterCriteria )
-					|| isSearchCriteriaValidated( item.getPage( ).getDescription( ), strFilterCriteria )
-					|| isSearchCriteriaValidated( String.valueOf( item.getPage( ).getId( ) ), strFilterCriteria ) ) )
-			{
-				String name = item.getPage( ).getName( ) != null ? item.getPage( ).getName( ) : "";
-				String description = item.getPage( ).getDescription( ) != null ? item.getPage( ).getDescription( ) : "";
-				String value = name + " - " + description;
+            if ( item.getPage( ) != null && ( isSearchCriteriaValidated( item.getPage( ).getName( ), strFilterCriteria )
+                    || isSearchCriteriaValidated( item.getPage( ).getDescription( ), strFilterCriteria )
+                    || isSearchCriteriaValidated( String.valueOf( item.getPage( ).getId( ) ), strFilterCriteria ) ) )
+            {
+                String name = item.getPage( ).getName( ) != null ? item.getPage( ).getName( ) : "";
+                String description = item.getPage( ).getDescription( ) != null ? item.getPage( ).getDescription( ) : "";
+                String value = name + " - " + description;
 
-				referenceList.addItem( item.getPage( ).getId( ), value );
-			}
+                referenceList.addItem( item.getPage( ).getId( ), value );
+            }
 
-			if( item.getChilds( ) != null )
-			{
-				for( MenuItem child : item.getChilds( ) )
-				{
-					traverseItem( child, referenceList, strFilterCriteria );
-				}
-			}
-		}
-	}
+            if ( item.getChilds( ) != null )
+            {
+                for ( MenuItem child : item.getChilds( ) )
+                {
+                    traverseItem( child, referenceList, strFilterCriteria );
+                }
+            }
+        }
+    }
 
-	public String getLabelPageById( String strSourceItemId )
-	{
+    public String getLabelPageById( String strSourceItemId )
+    {
 
-		ReferenceList listPages = getAvailablePagesReferenceList( "" );
+        ReferenceList listPages = getAvailablePagesReferenceList( "" );
 
-		for( ReferenceItem page : listPages )
-		{
-			if( Strings.CS.equals( strSourceItemId, page.getCode( ) ) )
-			{
-				return page.getName( );
-			}
-		}
+        for ( ReferenceItem page : listPages )
+        {
+            if ( Strings.CS.equals( strSourceItemId, page.getCode( ) ) )
+            {
+                return page.getName( );
+            }
+        }
 
-		return "";
-	}
+        return "";
+    }
 
-	/**
-	 * This method observes the initialization of the {@link ApplicationScoped}
-	 * context.
-	 * It ensures that this CDI beans are instantiated at the application startup.
-	 *
-	 * <p>
-	 * This method is triggered automatically by CDI when the
-	 * {@link ApplicationScoped} context is initialized,
-	 * which typically occurs during the startup of the application server.
-	 * </p>
-	 *
-	 * @param context the {@link ServletContext} that is initialized. This parameter
-	 *                is observed
-	 *                and injected automatically by CDI when the
-	 *                {@link ApplicationScoped} context is initialized.
-	 */
-	public void initializedService( @Observes @Initialized( ApplicationScoped.class ) ServletContext context )
-	{
-		// This method is intentionally left empty to trigger CDI bean instantiation
-	}
+    /**
+     * This method observes the initialization of the {@link ApplicationScoped} context. It ensures that this CDI beans are instantiated at the application
+     * startup.
+     *
+     * <p>
+     * This method is triggered automatically by CDI when the {@link ApplicationScoped} context is initialized, which typically occurs during the startup of the
+     * application server.
+     * </p>
+     *
+     * @param context
+     *            the {@link ServletContext} that is initialized. This parameter is observed and injected automatically by CDI when the
+     *            {@link ApplicationScoped} context is initialized.
+     */
+    public void initializedService( @Observes @Initialized( ApplicationScoped.class ) ServletContext context )
+    {
+        // This method is intentionally left empty to trigger CDI bean instantiation
+    }
 
 }

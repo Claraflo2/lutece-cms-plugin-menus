@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.menus.business;
 
-
 import org.junit.jupiter.api.Test;
 
 import fr.paris.lutece.test.LuteceTestCase;

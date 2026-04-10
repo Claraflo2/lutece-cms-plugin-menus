@@ -43,18 +43,18 @@ import jakarta.inject.Inject;
  */
 public class MenusPlugin extends PluginDefaultImplementation
 {
-	// Constants
-	public static final String PLUGIN_NAME = "menus";
+    // Constants
+    public static final String PLUGIN_NAME = "menus";
 
-	@Inject
-	private MenusService _menusService;
+    @Inject
+    private MenusService _menusService;
 
-	/**
-	 * Initialize the plugin Menus
-	 */
-	@Override
-	public void init( )
-	{
-		_menusService.init( );
-	}
+    /**
+     * Initialize the plugin Menus
+     */
+    @Override
+    public void init( )
+    {
+        _menusService.init( );
+    }
 }

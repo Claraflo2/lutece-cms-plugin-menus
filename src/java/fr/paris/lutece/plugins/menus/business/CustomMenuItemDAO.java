@@ -47,240 +47,240 @@ import java.util.List;
 @ApplicationScoped
 public final class CustomMenuItemDAO implements ICustomMenuItemDAO
 {
-	// Constants
-	private static final String SQL_QUERY_SELECT = "SELECT id_item, id_parent_menu, id_source_item, is_label_dynamic, is_blank, label, type, url, item_order FROM menus_custom_menu_items WHERE id_item = ?";
-	private static final String SQL_QUERY_INSERT = "INSERT INTO menus_custom_menu_items ( id_parent_menu, id_source_item, is_label_dynamic, is_blank, label, type, url, item_order ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )";
-	private static final String SQL_QUERY_SELECT_MAX_ORDER = "SELECT max(item_order) FROM menus_custom_menu_items WHERE id_parent_menu= ?";
-	private static final String SQL_QUERY_DELETE = "DELETE FROM menus_custom_menu_items WHERE id_item = ?";
-	private static final String SQL_QUERY_DELETE_BY_MENU = "DELETE FROM menus_custom_menu_items WHERE id_parent_menu = ?";
-	private static final String SQL_QUERY_DELETE_ALL_SUBMENU_BY_ID_SUBMENU = "DELETE FROM menus_custom_menu_items WHERE id_source_item = ?";
-	private static final String SQL_QUERY_UPDATE = "UPDATE menus_custom_menu_items SET id_parent_menu = ?, id_source_item = ?, is_label_dynamic = ?, is_blank = ?, label = ?, type = ?, url = ?, item_order = ? WHERE id_item = ?";
-	private static final String SQL_QUERY_SELECTALL = "SELECT id_item, id_parent_menu, id_source_item, is_label_dynamic, label, type, url, item_order FROM menus_custom_menu_items";
-	private static final String SQL_QUERY_SELECTALL_BY_MENU = "SELECT id_item, id_parent_menu, id_source_item, is_label_dynamic, is_blank, label, type, url, item_order FROM menus_custom_menu_items WHERE id_parent_menu = ? ORDER BY item_order";
-	private static final String SQL_QUERY_SELECTALL_ID_BY_MENU_ID = "SELECT id_item FROM menus_custom_menu_items WHERE id_parent_menu = ? ORDER BY item_order";
+    // Constants
+    private static final String SQL_QUERY_SELECT = "SELECT id_item, id_parent_menu, id_source_item, is_label_dynamic, is_blank, label, type, url, item_order FROM menus_custom_menu_items WHERE id_item = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO menus_custom_menu_items ( id_parent_menu, id_source_item, is_label_dynamic, is_blank, label, type, url, item_order ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )";
+    private static final String SQL_QUERY_SELECT_MAX_ORDER = "SELECT max(item_order) FROM menus_custom_menu_items WHERE id_parent_menu= ?";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM menus_custom_menu_items WHERE id_item = ?";
+    private static final String SQL_QUERY_DELETE_BY_MENU = "DELETE FROM menus_custom_menu_items WHERE id_parent_menu = ?";
+    private static final String SQL_QUERY_DELETE_ALL_SUBMENU_BY_ID_SUBMENU = "DELETE FROM menus_custom_menu_items WHERE id_source_item = ?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE menus_custom_menu_items SET id_parent_menu = ?, id_source_item = ?, is_label_dynamic = ?, is_blank = ?, label = ?, type = ?, url = ?, item_order = ? WHERE id_item = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_item, id_parent_menu, id_source_item, is_label_dynamic, label, type, url, item_order FROM menus_custom_menu_items";
+    private static final String SQL_QUERY_SELECTALL_BY_MENU = "SELECT id_item, id_parent_menu, id_source_item, is_label_dynamic, is_blank, label, type, url, item_order FROM menus_custom_menu_items WHERE id_parent_menu = ? ORDER BY item_order";
+    private static final String SQL_QUERY_SELECTALL_ID_BY_MENU_ID = "SELECT id_item FROM menus_custom_menu_items WHERE id_parent_menu = ? ORDER BY item_order";
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	public void insert( CustomMenuItem customMenuItem, Plugin plugin )
-	{
-		Integer order = selectMaxOrderGroupByMenuParent( customMenuItem, plugin );
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void insert( CustomMenuItem customMenuItem, Plugin plugin )
+    {
+        Integer order = selectMaxOrderGroupByMenuParent( customMenuItem, plugin );
 
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
-		{
-			int nIndex = 1;
-			daoUtil.setInt( nIndex ++ , customMenuItem.getParentMenuId( ) );
-			daoUtil.setString( nIndex ++ , customMenuItem.getSourceItemId( ) );
-			daoUtil.setBoolean( nIndex ++ , customMenuItem.isLabelDynamic( ) );
-			daoUtil.setBoolean( nIndex ++ , customMenuItem.isBlank( ) );
-			daoUtil.setString( nIndex ++ , customMenuItem.getLabel( ) );
-			daoUtil.setString( nIndex ++ , customMenuItem.getType( ) );
-			daoUtil.setString( nIndex ++ , customMenuItem.getUrl( ) );
-			daoUtil.setInt( nIndex ++ , order );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
+        {
+            int nIndex = 1;
+            daoUtil.setInt( nIndex++, customMenuItem.getParentMenuId( ) );
+            daoUtil.setString( nIndex++, customMenuItem.getSourceItemId( ) );
+            daoUtil.setBoolean( nIndex++, customMenuItem.isLabelDynamic( ) );
+            daoUtil.setBoolean( nIndex++, customMenuItem.isBlank( ) );
+            daoUtil.setString( nIndex++, customMenuItem.getLabel( ) );
+            daoUtil.setString( nIndex++, customMenuItem.getType( ) );
+            daoUtil.setString( nIndex++, customMenuItem.getUrl( ) );
+            daoUtil.setInt( nIndex++, order );
 
-			daoUtil.executeUpdate( );
-			if( daoUtil.nextGeneratedKey( ) )
-			{
-				customMenuItem.setId( daoUtil.getGeneratedKeyInt( 1 ) );
-			}
-		}
-	}
+            daoUtil.executeUpdate( );
+            if ( daoUtil.nextGeneratedKey( ) )
+            {
+                customMenuItem.setId( daoUtil.getGeneratedKeyInt( 1 ) );
+            }
+        }
+    }
 
-	private Integer selectMaxOrderGroupByMenuParent( CustomMenuItem customMenuItem, Plugin plugin )
-	{
+    private Integer selectMaxOrderGroupByMenuParent( CustomMenuItem customMenuItem, Plugin plugin )
+    {
 
-		Integer nOrder = 1;
+        Integer nOrder = 1;
 
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MAX_ORDER, plugin ) )
-		{
-			daoUtil.setInt( 1, customMenuItem.getParentMenuId( ) );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MAX_ORDER, plugin ) )
+        {
+            daoUtil.setInt( 1, customMenuItem.getParentMenuId( ) );
 
-			daoUtil.executeQuery( );
-			if( daoUtil.next( ) )
-			{
-				nOrder = daoUtil.getInt( 1 ) + 1;
-			}
-		}
-		return nOrder;
-	}
+            daoUtil.executeQuery( );
+            if ( daoUtil.next( ) )
+            {
+                nOrder = daoUtil.getInt( 1 ) + 1;
+            }
+        }
+        return nOrder;
+    }
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	public CustomMenuItem load( int nKey, Plugin plugin )
-	{
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
-		{
-			daoUtil.setInt( 1, nKey );
-			daoUtil.executeQuery( );
-			CustomMenuItem customMenuItem = null;
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public CustomMenuItem load( int nKey, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
+        {
+            daoUtil.setInt( 1, nKey );
+            daoUtil.executeQuery( );
+            CustomMenuItem customMenuItem = null;
 
-			if( daoUtil.next( ) )
-			{
-				customMenuItem = new CustomMenuItem( );
-				int nIndex = 1;
+            if ( daoUtil.next( ) )
+            {
+                customMenuItem = new CustomMenuItem( );
+                int nIndex = 1;
 
-				customMenuItem.setId( daoUtil.getInt( nIndex ++ ) );
-				customMenuItem.setParentMenuId( daoUtil.getInt( nIndex ++ ) );
-				customMenuItem.setSourceItemId( daoUtil.getString( nIndex ++ ) );
-				customMenuItem.setIsLabelDynamic( daoUtil.getBoolean( nIndex ++ ) );
-				customMenuItem.setIsBlank( daoUtil.getBoolean( nIndex ++ ) );
-				customMenuItem.setLabel( daoUtil.getString( nIndex ++ ) );
-				customMenuItem.setType( daoUtil.getString( nIndex ++ ) );
-				customMenuItem.setUrl( daoUtil.getString( nIndex ++ ) );
-				customMenuItem.setOrder( daoUtil.getInt( nIndex ++ ) );
-			}
+                customMenuItem.setId( daoUtil.getInt( nIndex++ ) );
+                customMenuItem.setParentMenuId( daoUtil.getInt( nIndex++ ) );
+                customMenuItem.setSourceItemId( daoUtil.getString( nIndex++ ) );
+                customMenuItem.setIsLabelDynamic( daoUtil.getBoolean( nIndex++ ) );
+                customMenuItem.setIsBlank( daoUtil.getBoolean( nIndex++ ) );
+                customMenuItem.setLabel( daoUtil.getString( nIndex++ ) );
+                customMenuItem.setType( daoUtil.getString( nIndex++ ) );
+                customMenuItem.setUrl( daoUtil.getString( nIndex++ ) );
+                customMenuItem.setOrder( daoUtil.getInt( nIndex++ ) );
+            }
 
-			return customMenuItem;
-		}
-	}
+            return customMenuItem;
+        }
+    }
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	public void delete( int nKey, Plugin plugin )
-	{
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
-		{
-			daoUtil.setInt( 1, nKey );
-			daoUtil.executeUpdate( );
-		}
-	}
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void delete( int nKey, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nKey );
+            daoUtil.executeUpdate( );
+        }
+    }
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	public void deleteByMenuId( int nMenuId, Plugin plugin )
-	{
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_MENU, plugin ) )
-		{
-			daoUtil.setInt( 1, nMenuId );
-			daoUtil.executeUpdate( );
-		}
-	}
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void deleteByMenuId( int nMenuId, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_MENU, plugin ) )
+        {
+            daoUtil.setInt( 1, nMenuId );
+            daoUtil.executeUpdate( );
+        }
+    }
 
-	@Override
-	public void deleteSubMenuItemBySubMenuId( int nMenuSourceId, Plugin plugin )
-	{
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_ALL_SUBMENU_BY_ID_SUBMENU, plugin ) )
-		{
-			daoUtil.setInt( 1, nMenuSourceId );
-			daoUtil.executeUpdate( );
-		}
-	}
+    @Override
+    public void deleteSubMenuItemBySubMenuId( int nMenuSourceId, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_ALL_SUBMENU_BY_ID_SUBMENU, plugin ) )
+        {
+            daoUtil.setInt( 1, nMenuSourceId );
+            daoUtil.executeUpdate( );
+        }
+    }
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	public void store( CustomMenuItem customMenuItem, Plugin plugin )
-	{
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
-		{
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void store( CustomMenuItem customMenuItem, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {
 
-			int nIndex = 1;
-			daoUtil.setInt( nIndex ++ , customMenuItem.getParentMenuId( ) );
-			daoUtil.setString( nIndex ++ , customMenuItem.getSourceItemId( ) );
-			daoUtil.setBoolean( nIndex ++ , customMenuItem.isLabelDynamic( ) );
-			daoUtil.setBoolean( nIndex ++ , customMenuItem.isBlank( ) );
-			daoUtil.setString( nIndex ++ , customMenuItem.getLabel( ) );
-			daoUtil.setString( nIndex ++ , customMenuItem.getType( ) );
-			daoUtil.setString( nIndex ++ , customMenuItem.getUrl( ) );
-			daoUtil.setInt( nIndex ++ , customMenuItem.getOrder( ) );
-			daoUtil.setInt( nIndex, customMenuItem.getId( ) );
+            int nIndex = 1;
+            daoUtil.setInt( nIndex++, customMenuItem.getParentMenuId( ) );
+            daoUtil.setString( nIndex++, customMenuItem.getSourceItemId( ) );
+            daoUtil.setBoolean( nIndex++, customMenuItem.isLabelDynamic( ) );
+            daoUtil.setBoolean( nIndex++, customMenuItem.isBlank( ) );
+            daoUtil.setString( nIndex++, customMenuItem.getLabel( ) );
+            daoUtil.setString( nIndex++, customMenuItem.getType( ) );
+            daoUtil.setString( nIndex++, customMenuItem.getUrl( ) );
+            daoUtil.setInt( nIndex++, customMenuItem.getOrder( ) );
+            daoUtil.setInt( nIndex, customMenuItem.getId( ) );
 
-			daoUtil.executeUpdate( );
-		}
-	}
+            daoUtil.executeUpdate( );
+        }
+    }
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	public List < CustomMenuItem > selectAll( Plugin plugin )
-	{
-		List < CustomMenuItem > customMenuItemList = new ArrayList <>( );
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
-		{
-			daoUtil.executeQuery( );
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<CustomMenuItem> selectAll( Plugin plugin )
+    {
+        List<CustomMenuItem> customMenuItemList = new ArrayList<>( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
+        {
+            daoUtil.executeQuery( );
 
-			while( daoUtil.next( ) )
-			{
-				CustomMenuItem customMenuItem = new CustomMenuItem( );
-				int nIndex = 1;
+            while ( daoUtil.next( ) )
+            {
+                CustomMenuItem customMenuItem = new CustomMenuItem( );
+                int nIndex = 1;
 
-				customMenuItem.setId( daoUtil.getInt( nIndex ++ ) );
-				customMenuItem.setParentMenuId( daoUtil.getInt( nIndex ++ ) );
-				customMenuItem.setSourceItemId( daoUtil.getString( nIndex ++ ) );
-				customMenuItem.setIsLabelDynamic( daoUtil.getBoolean( nIndex ++ ) );
-				customMenuItem.setIsBlank( daoUtil.getBoolean( nIndex ++ ) );
-				customMenuItem.setLabel( daoUtil.getString( nIndex ++ ) );
-				customMenuItem.setType( daoUtil.getString( nIndex ++ ) );
-				customMenuItem.setUrl( daoUtil.getString( nIndex ++ ) );
-				customMenuItem.setOrder( daoUtil.getInt( nIndex ++ ) );
+                customMenuItem.setId( daoUtil.getInt( nIndex++ ) );
+                customMenuItem.setParentMenuId( daoUtil.getInt( nIndex++ ) );
+                customMenuItem.setSourceItemId( daoUtil.getString( nIndex++ ) );
+                customMenuItem.setIsLabelDynamic( daoUtil.getBoolean( nIndex++ ) );
+                customMenuItem.setIsBlank( daoUtil.getBoolean( nIndex++ ) );
+                customMenuItem.setLabel( daoUtil.getString( nIndex++ ) );
+                customMenuItem.setType( daoUtil.getString( nIndex++ ) );
+                customMenuItem.setUrl( daoUtil.getString( nIndex++ ) );
+                customMenuItem.setOrder( daoUtil.getInt( nIndex++ ) );
 
-				customMenuItemList.add( customMenuItem );
-			}
+                customMenuItemList.add( customMenuItem );
+            }
 
-			return customMenuItemList;
-		}
-	}
+            return customMenuItemList;
+        }
+    }
 
-	/**
-	 * {@inheritDoc }
-	 */
-	@Override
-	public List < CustomMenuItem > selectByMenuId( int nMenuId, Plugin plugin )
-	{
-		List < CustomMenuItem > customMenuItemList = new ArrayList <>( );
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_BY_MENU, plugin ) )
-		{
-			daoUtil.setInt( 1, nMenuId );
-			daoUtil.executeQuery( );
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<CustomMenuItem> selectByMenuId( int nMenuId, Plugin plugin )
+    {
+        List<CustomMenuItem> customMenuItemList = new ArrayList<>( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_BY_MENU, plugin ) )
+        {
+            daoUtil.setInt( 1, nMenuId );
+            daoUtil.executeQuery( );
 
-			while( daoUtil.next( ) )
-			{
-				CustomMenuItem customMenuItem = new CustomMenuItem( );
-				int nIndex = 1;
+            while ( daoUtil.next( ) )
+            {
+                CustomMenuItem customMenuItem = new CustomMenuItem( );
+                int nIndex = 1;
 
-				customMenuItem.setId( daoUtil.getInt( nIndex ++ ) );
-				customMenuItem.setParentMenuId( daoUtil.getInt( nIndex ++ ) );
-				customMenuItem.setSourceItemId( daoUtil.getString( nIndex ++ ) );
-				customMenuItem.setIsLabelDynamic( daoUtil.getBoolean( nIndex ++ ) );
-				customMenuItem.setIsBlank( daoUtil.getBoolean( nIndex ++ ) );
-				customMenuItem.setLabel( daoUtil.getString( nIndex ++ ) );
-				customMenuItem.setType( daoUtil.getString( nIndex ++ ) );
-				customMenuItem.setUrl( daoUtil.getString( nIndex ++ ) );
-				customMenuItem.setOrder( daoUtil.getInt( nIndex ++ ) );
+                customMenuItem.setId( daoUtil.getInt( nIndex++ ) );
+                customMenuItem.setParentMenuId( daoUtil.getInt( nIndex++ ) );
+                customMenuItem.setSourceItemId( daoUtil.getString( nIndex++ ) );
+                customMenuItem.setIsLabelDynamic( daoUtil.getBoolean( nIndex++ ) );
+                customMenuItem.setIsBlank( daoUtil.getBoolean( nIndex++ ) );
+                customMenuItem.setLabel( daoUtil.getString( nIndex++ ) );
+                customMenuItem.setType( daoUtil.getString( nIndex++ ) );
+                customMenuItem.setUrl( daoUtil.getString( nIndex++ ) );
+                customMenuItem.setOrder( daoUtil.getInt( nIndex++ ) );
 
-				customMenuItemList.add( customMenuItem );
-			}
+                customMenuItemList.add( customMenuItem );
+            }
 
-			return customMenuItemList;
-		}
-	}
+            return customMenuItemList;
+        }
+    }
 
-	@Override
-	public List < Integer > selectAllIdsByMenuId( int nMenuId, Plugin plugin )
-	{
-		List < Integer > customMenuItemIdList = new ArrayList <>( );
+    @Override
+    public List<Integer> selectAllIdsByMenuId( int nMenuId, Plugin plugin )
+    {
+        List<Integer> customMenuItemIdList = new ArrayList<>( );
 
-		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID_BY_MENU_ID, plugin ) )
-		{
-			daoUtil.setInt( 1, nMenuId );
-			daoUtil.executeQuery( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID_BY_MENU_ID, plugin ) )
+        {
+            daoUtil.setInt( 1, nMenuId );
+            daoUtil.executeQuery( );
 
-			while( daoUtil.next( ) )
-			{
-				customMenuItemIdList.add( daoUtil.getInt( 1 ) );
-			}
-		}
+            while ( daoUtil.next( ) )
+            {
+                customMenuItemIdList.add( daoUtil.getInt( 1 ) );
+            }
+        }
 
-		return customMenuItemIdList;
-	}
+        return customMenuItemIdList;
+    }
 
 }

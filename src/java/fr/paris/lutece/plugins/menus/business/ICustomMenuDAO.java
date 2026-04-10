@@ -42,97 +42,95 @@ import java.util.List;
  */
 public interface ICustomMenuDAO
 {
-	/**
-	 * Insert a new record in the table.
-	 * 
-	 * @param customMenu
-	 *                   instance of the CustomMenu object to insert
-	 * @param plugin
-	 *                   the Plugin
-	 */
-	void insert( CustomMenu customMenu, Plugin plugin );
+    /**
+     * Insert a new record in the table.
+     * 
+     * @param customMenu
+     *            instance of the CustomMenu object to insert
+     * @param plugin
+     *            the Plugin
+     */
+    void insert( CustomMenu customMenu, Plugin plugin );
 
-	/**
-	 * Update the record in the table
-	 * 
-	 * @param customMenu
-	 *                   the reference of the CustomMenu
-	 * @param plugin
-	 *                   the Plugin
-	 */
-	void store( CustomMenu customMenu, Plugin plugin );
+    /**
+     * Update the record in the table
+     * 
+     * @param customMenu
+     *            the reference of the CustomMenu
+     * @param plugin
+     *            the Plugin
+     */
+    void store( CustomMenu customMenu, Plugin plugin );
 
-	/**
-	 * Delete a record from the table
-	 * 
-	 * @param nKey
-	 *               The identifier of the CustomMenu to delete
-	 * @param plugin
-	 *               the Plugin
-	 */
-	void delete( int nKey, Plugin plugin );
+    /**
+     * Delete a record from the table
+     * 
+     * @param nKey
+     *            The identifier of the CustomMenu to delete
+     * @param plugin
+     *            the Plugin
+     */
+    void delete( int nKey, Plugin plugin );
 
-	/**
-	 * Load the data from the table
-	 * 
-	 * @param nKey
-	 *               The identifier of the customMenu
-	 * @param plugin
-	 *               the Plugin
-	 * @return The instance of the customMenu
-	 */
-	CustomMenu load( int nKey, Plugin plugin );
+    /**
+     * Load the data from the table
+     * 
+     * @param nKey
+     *            The identifier of the customMenu
+     * @param plugin
+     *            the Plugin
+     * @return The instance of the customMenu
+     */
+    CustomMenu load( int nKey, Plugin plugin );
 
-	/**
-	 * Load the data of all the customMenu objects and returns them as a collection
-	 * 
-	 * @param plugin
-	 *               the Plugin
-	 * @return The collection which contains the data of all the customMenu objects
-	 */
-	List < CustomMenu > selectAll( Plugin plugin );
+    /**
+     * Load the data of all the customMenu objects and returns them as a collection
+     * 
+     * @param plugin
+     *            the Plugin
+     * @return The collection which contains the data of all the customMenu objects
+     */
+    List<CustomMenu> selectAll( Plugin plugin );
 
-	/**
-	 * Load the data of all the customMenu according to a list of customMenu Ids and
-	 * returns them as a collection
-	 * 
-	 * @param plugin
-	 *                the Plugin
-	 * @param listIds
-	 *                the Ids list
-	 * @return The collection which contains the data of all the customMenu objects
-	 */
-	List < CustomMenu > selectMenusListByIds( Plugin _plugin, List < Integer > listIds );
+    /**
+     * Load the data of all the customMenu according to a list of customMenu Ids and returns them as a collection
+     * 
+     * @param plugin
+     *            the Plugin
+     * @param listIds
+     *            the Ids list
+     * @return The collection which contains the data of all the customMenu objects
+     */
+    List<CustomMenu> selectMenusListByIds( Plugin _plugin, List<Integer> listIds );
 
-	/**
-	 * Load the data of all the customMenu idss and returns them as a collection
-	 * 
-	 * @param plugin
-	 *               the Plugin
-	 * @return The collection which contains the data of all the customMenu objects
-	 */
-	List < Integer > selectIdMenusList( Plugin _plugin );
+    /**
+     * Load the data of all the customMenu idss and returns them as a collection
+     * 
+     * @param plugin
+     *            the Plugin
+     * @return The collection which contains the data of all the customMenu objects
+     */
+    List<Integer> selectIdMenusList( Plugin _plugin );
 
-	/**
-	 * Load the data of all the customMenu according to filter Criteria and returns
-	 * them as a collection
-	 * 
-	 * @param plugin
-	 *                       the Plugin
-	 * @param filterCriteria
-	 *                       the filter Criteria
-	 * @return The collection which contains the data of all the customMenu objects
-	 */
-	List < CustomMenu > selectMenusListByFilterCriteria( Plugin _plugin, String filterCriteria );
+    /**
+     * Load the data of all the customMenu according to filter Criteria and returns them as a collection
+     * 
+     * @param plugin
+     *            the Plugin
+     * @param filterCriteria
+     *            the filter Criteria
+     * @return The collection which contains the data of all the customMenu objects
+     */
+    List<CustomMenu> selectMenusListByFilterCriteria( Plugin _plugin, String filterCriteria );
 
-	/**
-	 * Return if bookmark is unique or not
-	 *
-	 * @param plugin
-	 *                   the Plugin
-	 * @param customMenu
-	 *                   instance of the CustomMenu object to insert
-	 * @return True if bookmark is unique or false else.
-	 */
-	Integer countBookmark( Plugin plugin, CustomMenu customMenu );
+    /**
+     * Return if bookmark is unique or not
+     *
+     * @param plugin
+     *            the Plugin
+     * @param customMenu
+     *            instance of the CustomMenu object to insert
+     * @return True if bookmark is unique or false else.
+     */
+    Integer countBookmark( Plugin plugin, CustomMenu customMenu );
 }

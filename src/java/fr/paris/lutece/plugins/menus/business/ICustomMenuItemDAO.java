@@ -42,102 +42,96 @@ import java.util.List;
  */
 public interface ICustomMenuItemDAO
 {
-	/**
-	 * Insert a new record in the table.
-	 * 
-	 * @param customMenuItem
-	 *                       instance of the CustomMenuItem object to insert
-	 * @param plugin
-	 *                       the Plugin
-	 */
-	void insert( CustomMenuItem customMenuItem, Plugin plugin );
+    /**
+     * Insert a new record in the table.
+     * 
+     * @param customMenuItem
+     *            instance of the CustomMenuItem object to insert
+     * @param plugin
+     *            the Plugin
+     */
+    void insert( CustomMenuItem customMenuItem, Plugin plugin );
 
-	/**
-	 * Update the record in the table
-	 * 
-	 * @param customMenuItem
-	 *                       the reference of the CustomMenuItem
-	 * @param plugin
-	 *                       the Plugin
-	 */
-	void store( CustomMenuItem customMenuItem, Plugin plugin );
+    /**
+     * Update the record in the table
+     * 
+     * @param customMenuItem
+     *            the reference of the CustomMenuItem
+     * @param plugin
+     *            the Plugin
+     */
+    void store( CustomMenuItem customMenuItem, Plugin plugin );
 
-	/**
-	 * Delete a record from the table
-	 * 
-	 * @param nKey
-	 *               The identifier of the CustomMenuItem to delete
-	 * @param plugin
-	 *               the Plugin
-	 */
-	void delete( int nKey, Plugin plugin );
+    /**
+     * Delete a record from the table
+     * 
+     * @param nKey
+     *            The identifier of the CustomMenuItem to delete
+     * @param plugin
+     *            the Plugin
+     */
+    void delete( int nKey, Plugin plugin );
 
-	/**
-	 * Delete all items of a menu
-	 * 
-	 * @param nMenuId
-	 *                The identifier of the menu
-	 * @param plugin
-	 *                the Plugin
-	 */
-	void deleteByMenuId( int nMenuId, Plugin plugin );
+    /**
+     * Delete all items of a menu
+     * 
+     * @param nMenuId
+     *            The identifier of the menu
+     * @param plugin
+     *            the Plugin
+     */
+    void deleteByMenuId( int nMenuId, Plugin plugin );
 
-	/**
-	 * Delete all subMenu item from all menu
-	 * 
-	 * @param nMenuId
-	 *                The identifier of the menu to delete
-	 * @param plugin
-	 *                the Plugin
-	 */
-	void deleteSubMenuItemBySubMenuId( int nMenuSourceId, Plugin plugin );
+    /**
+     * Delete all subMenu item from all menu
+     * 
+     * @param nMenuId
+     *            The identifier of the menu to delete
+     * @param plugin
+     *            the Plugin
+     */
+    void deleteSubMenuItemBySubMenuId( int nMenuSourceId, Plugin plugin );
 
-	/**
-	 * Load the data from the table
-	 * 
-	 * @param nKey
-	 *               The identifier of the customMenuItem
-	 * @param plugin
-	 *               the Plugin
-	 * @return The instance of the customMenuItem
-	 */
-	CustomMenuItem load( int nKey, Plugin plugin );
+    /**
+     * Load the data from the table
+     * 
+     * @param nKey
+     *            The identifier of the customMenuItem
+     * @param plugin
+     *            the Plugin
+     * @return The instance of the customMenuItem
+     */
+    CustomMenuItem load( int nKey, Plugin plugin );
 
-	/**
-	 * Load the data of all the customMenuItem objects and returns them as a
-	 * collection
-	 * 
-	 * @param plugin
-	 *               the Plugin
-	 * @return The collection which contains the data of all the customMenuItem
-	 *         objects
-	 */
-	List < CustomMenuItem > selectAll( Plugin plugin );
+    /**
+     * Load the data of all the customMenuItem objects and returns them as a collection
+     * 
+     * @param plugin
+     *            the Plugin
+     * @return The collection which contains the data of all the customMenuItem objects
+     */
+    List<CustomMenuItem> selectAll( Plugin plugin );
 
-	/**
-	 * Load the data of all the customMenuItem objects for a specific menu and
-	 * returns them as a list
-	 * 
-	 * @param nMenuId
-	 *                The identifier of the menu
-	 * @param plugin
-	 *                the Plugin
-	 * @return The list which contains the data of all the customMenuItem
-	 *         objects for the menu
-	 */
-	List < CustomMenuItem > selectByMenuId( int nMenuId, Plugin plugin );
+    /**
+     * Load the data of all the customMenuItem objects for a specific menu and returns them as a list
+     * 
+     * @param nMenuId
+     *            The identifier of the menu
+     * @param plugin
+     *            the Plugin
+     * @return The list which contains the data of all the customMenuItem objects for the menu
+     */
+    List<CustomMenuItem> selectByMenuId( int nMenuId, Plugin plugin );
 
-	/**
-	 * Load the data of all the customMenuItem objects for a specific menu and
-	 * returns their ids as a list
-	 * 
-	 * @param nMenuId
-	 *                The identifier of the menu
-	 * @param plugin
-	 *                the Plugin
-	 * @return The list which contains the id of all the customMenuItem
-	 *         objects for the menu
-	 */
-	List < Integer > selectAllIdsByMenuId( int nMenuId, Plugin _plugin );
+    /**
+     * Load the data of all the customMenuItem objects for a specific menu and returns their ids as a list
+     * 
+     * @param nMenuId
+     *            The identifier of the menu
+     * @param plugin
+     *            the Plugin
+     * @return The list which contains the id of all the customMenuItem objects for the menu
+     */
+    List<Integer> selectAllIdsByMenuId( int nMenuId, Plugin _plugin );
 
 }

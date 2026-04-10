@@ -51,141 +51,137 @@ import org.apache.commons.lang3.Strings;
 public class ValidatorCustomItemForm
 {
 
-	private static final String MENU_ITEM_TYPE_XPAGE = "xpage";
-	private static final String MENU_ITEM_TYPE_PAGE = "page";
-	private static final String MENU_ITEM_TYPE_EXTERNAL_URL = "external_url";
-	private static final String MENU_ITEM_TYPE_MENU = "menu";
+    private static final String MENU_ITEM_TYPE_XPAGE = "xpage";
+    private static final String MENU_ITEM_TYPE_PAGE = "page";
+    private static final String MENU_ITEM_TYPE_EXTERNAL_URL = "external_url";
+    private static final String MENU_ITEM_TYPE_MENU = "menu";
 
-	// Messages
-	private final String MESSAGE_TYPE_NOT_EMPTY = "menus.validation.customMenuItem.type.notEmpty";
-	private final String MESSAGE_TYPE_NOT_VALID = "menus.validation.customMenuItem.type.pattern";
-	private final String MESSAGE_PARENT_MENU_NOT_VALID = "menus.validation.customMenuItem.parentMenu.notValid";
-	private final String MESSAGE_SUBMENU_NOT_EMPTY = "menus.validation.customMenuItem.subMenu.notEmpty";
-	private final String MESSAGE_URL_NOT_EMPTY = "menus.validation.customMenuItem.url.notEmpty";
-	private final String MESSAGE_LABEL_NOT_EMPTY = "menus.validation.customMenuItem.label.notEmpty";
-	private final String MESSAGE_DYNAMIC_PAGE_LABEL_NOT_EMPTY = "menus.validation.customMenuItem.pageLabel.notEmpty";
+    // Messages
+    private final String MESSAGE_TYPE_NOT_EMPTY = "menus.validation.customMenuItem.type.notEmpty";
+    private final String MESSAGE_TYPE_NOT_VALID = "menus.validation.customMenuItem.type.pattern";
+    private final String MESSAGE_PARENT_MENU_NOT_VALID = "menus.validation.customMenuItem.parentMenu.notValid";
+    private final String MESSAGE_SUBMENU_NOT_EMPTY = "menus.validation.customMenuItem.subMenu.notEmpty";
+    private final String MESSAGE_URL_NOT_EMPTY = "menus.validation.customMenuItem.url.notEmpty";
+    private final String MESSAGE_LABEL_NOT_EMPTY = "menus.validation.customMenuItem.label.notEmpty";
+    private final String MESSAGE_DYNAMIC_PAGE_LABEL_NOT_EMPTY = "menus.validation.customMenuItem.pageLabel.notEmpty";
 
-	private List < ErrorMessage > _listErrorsValidator = new ArrayList <>( );
+    private List<ErrorMessage> _listErrorsValidator = new ArrayList<>( );
 
-	/**
-	 * Add an error message
-	 * 
-	 * @param strMessageKey
-	 *                      The message
-	 * @param locale
-	 *                      The locale
-	 */
-	private void addErrorToListErrors( String strMessageKey, Locale locale )
-	{
-		_listErrorsValidator.add( new MVCMessage( I18nService.getLocalizedString( strMessageKey, locale ) ) );
-	}
+    /**
+     * Add an error message
+     * 
+     * @param strMessageKey
+     *            The message
+     * @param locale
+     *            The locale
+     */
+    private void addErrorToListErrors( String strMessageKey, Locale locale )
+    {
+        _listErrorsValidator.add( new MVCMessage( I18nService.getLocalizedString( strMessageKey, locale ) ) );
+    }
 
-	/**
-	 * validate Custom Menu item form
-	 * 
-	 * @param menuItems
-	 *                  Item to test
-	 * @param locale
-	 *                  The locale
-	 */
-	public boolean isValid( CustomMenuItem menuItems, Locale locale )
-	{
+    /**
+     * validate Custom Menu item form
+     * 
+     * @param menuItems
+     *            Item to test
+     * @param locale
+     *            The locale
+     */
+    public boolean isValid( CustomMenuItem menuItems, Locale locale )
+    {
 
-		_listErrorsValidator.clear( );
-		String strType = menuItems.getType( );
+        _listErrorsValidator.clear( );
+        String strType = menuItems.getType( );
 
-		if( ! isValidMenuParent( menuItems ) )
-		{
-			addErrorToListErrors( MESSAGE_PARENT_MENU_NOT_VALID, locale );
-			return false;
-		}
+        if ( !isValidMenuParent( menuItems ) )
+        {
+            addErrorToListErrors( MESSAGE_PARENT_MENU_NOT_VALID, locale );
+            return false;
+        }
 
-		if( strType != null )
-		{
+        if ( strType != null )
+        {
 
-			switch( strType )
-			{
+            switch( strType )
+            {
 
-				case MENU_ITEM_TYPE_XPAGE :
-				case MENU_ITEM_TYPE_PAGE :
-				case MENU_ITEM_TYPE_EXTERNAL_URL :
-					if( ! isValidLabel( menuItems, locale ) )
-					{
-						if( Strings.CS.equals( menuItems.getType( ), MENU_ITEM_TYPE_PAGE )
-								&& ! menuItems.isLabelDynamic( ) )
-						{
-							addErrorToListErrors( MESSAGE_DYNAMIC_PAGE_LABEL_NOT_EMPTY, locale );
-						}
-						else
-						{
-							addErrorToListErrors( MESSAGE_LABEL_NOT_EMPTY, locale );
-						}
-					}
-					if( ! isValidUrl( menuItems, locale ) )
-					{
-						addErrorToListErrors( MESSAGE_URL_NOT_EMPTY, locale );
-					}
+                case MENU_ITEM_TYPE_XPAGE:
+                case MENU_ITEM_TYPE_PAGE:
+                case MENU_ITEM_TYPE_EXTERNAL_URL:
+                    if ( !isValidLabel( menuItems, locale ) )
+                    {
+                        if ( Strings.CS.equals( menuItems.getType( ), MENU_ITEM_TYPE_PAGE ) && !menuItems.isLabelDynamic( ) )
+                        {
+                            addErrorToListErrors( MESSAGE_DYNAMIC_PAGE_LABEL_NOT_EMPTY, locale );
+                        }
+                        else
+                        {
+                            addErrorToListErrors( MESSAGE_LABEL_NOT_EMPTY, locale );
+                        }
+                    }
+                    if ( !isValidUrl( menuItems, locale ) )
+                    {
+                        addErrorToListErrors( MESSAGE_URL_NOT_EMPTY, locale );
+                    }
 
-					return isValidLabel( menuItems, locale ) && isValidUrl( menuItems, locale );
-				case MENU_ITEM_TYPE_MENU :
-					if( ! isValidMenu( menuItems, locale ) )
-					{
-						addErrorToListErrors( MESSAGE_SUBMENU_NOT_EMPTY, locale );
-					}
-					if( ! isValidLabel( menuItems, locale ) )
-					{
-						addErrorToListErrors( MESSAGE_LABEL_NOT_EMPTY, locale );
-					}
-					if( ! isValidUrl( menuItems, locale ) )
-					{
-						addErrorToListErrors( MESSAGE_URL_NOT_EMPTY, locale );
-					}
+                    return isValidLabel( menuItems, locale ) && isValidUrl( menuItems, locale );
+                case MENU_ITEM_TYPE_MENU:
+                    if ( !isValidMenu( menuItems, locale ) )
+                    {
+                        addErrorToListErrors( MESSAGE_SUBMENU_NOT_EMPTY, locale );
+                    }
+                    if ( !isValidLabel( menuItems, locale ) )
+                    {
+                        addErrorToListErrors( MESSAGE_LABEL_NOT_EMPTY, locale );
+                    }
+                    if ( !isValidUrl( menuItems, locale ) )
+                    {
+                        addErrorToListErrors( MESSAGE_URL_NOT_EMPTY, locale );
+                    }
 
-					return isValidLabel( menuItems, locale ) && isValidUrl( menuItems, locale )
-							&& isValidMenu( menuItems, locale );
-				default :
-					addErrorToListErrors( MESSAGE_TYPE_NOT_VALID, locale );
-					return false;
-			}
+                    return isValidLabel( menuItems, locale ) && isValidUrl( menuItems, locale ) && isValidMenu( menuItems, locale );
+                default:
+                    addErrorToListErrors( MESSAGE_TYPE_NOT_VALID, locale );
+                    return false;
+            }
 
-		}
+        }
 
-		addErrorToListErrors( MESSAGE_TYPE_NOT_EMPTY, locale );
-		return true;
-	}
+        addErrorToListErrors( MESSAGE_TYPE_NOT_EMPTY, locale );
+        return true;
+    }
 
-	private boolean isValidMenuParent( CustomMenuItem menuItems )
-	{
-		return menuItems.getParentMenuId( ) > 0;
-	}
+    private boolean isValidMenuParent( CustomMenuItem menuItems )
+    {
+        return menuItems.getParentMenuId( ) > 0;
+    }
 
-	private boolean isValidMenu( CustomMenuItem menuItems, Locale locale )
-	{
-		return ! StringUtils.isBlank( menuItems.getSourceItemId( ) );
-	}
+    private boolean isValidMenu( CustomMenuItem menuItems, Locale locale )
+    {
+        return !StringUtils.isBlank( menuItems.getSourceItemId( ) );
+    }
 
-	private boolean isValidUrl( CustomMenuItem menuItems, Locale locale )
-	{
-		return ! StringUtils.isBlank( menuItems.getUrl( ) );
-	}
+    private boolean isValidUrl( CustomMenuItem menuItems, Locale locale )
+    {
+        return !StringUtils.isBlank( menuItems.getUrl( ) );
+    }
 
-	private boolean isValidLabel( CustomMenuItem menuItems, Locale locale )
-	{
+    private boolean isValidLabel( CustomMenuItem menuItems, Locale locale )
+    {
 
-		if( ( StringUtils.isBlank( menuItems.getLabel( ) )
-				&& ! Strings.CS.equals( menuItems.getType( ), MENU_ITEM_TYPE_PAGE ) )
-				|| ( StringUtils.isBlank( menuItems.getLabel( ) )
-						&& Strings.CS.equals( menuItems.getType( ), MENU_ITEM_TYPE_PAGE )
-						&& ! menuItems.isLabelDynamic( ) ) )
-		{
-			return false;
-		}
+        if ( ( StringUtils.isBlank( menuItems.getLabel( ) ) && !Strings.CS.equals( menuItems.getType( ), MENU_ITEM_TYPE_PAGE ) )
+                || ( StringUtils.isBlank( menuItems.getLabel( ) ) && Strings.CS.equals( menuItems.getType( ), MENU_ITEM_TYPE_PAGE )
+                        && !menuItems.isLabelDynamic( ) ) )
+        {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	public List < ErrorMessage > getListErrors( )
-	{
-		return _listErrorsValidator;
-	}
+    public List<ErrorMessage> getListErrors( )
+    {
+        return _listErrorsValidator;
+    }
 }
